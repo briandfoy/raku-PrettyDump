@@ -1,0 +1,11 @@
+{
+	"name"        : "Pretty::Printer",
+	"version"     : "*",
+	"description" : "Pretty-printer for Perl6 data structures"
+	"depends"     : [
+	],
+	"provides"    : {
+		"Pretty::Printer"        : "lib/Pretty/Printer.pm"
+	},
+	"source-url"  : "git://github.com/drforr/perl6-pp.git"
+}
