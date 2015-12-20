@@ -71,63 +71,67 @@ class Pretty::Printer
 
 	method Pair($ds)
 		{
-		my $str = ':';
+		my @items = ':';
 		given $ds.value.WHAT
 			{
 			when Bool
 	 			{
-				$str ~= '!' unless $ds.value;
-				$str ~= $ds.key
+				@items.push( '!' ) unless $ds.value;
+				@items.push( $ds.key );
 				}
 			default
 				{
-				$str ~= $ds.key;
-				$str ~= '(';
-				$str ~= self.pp($ds.value);
-				$str ~= ')';
+				@items.push( $ds.key );
+				@items.push( '(' );
+				@items.push( self.pp($ds.value) );
+				@items.push( ')' );
 				}
 			}
-		return $str;
+		return join( '', @items );
 		}
 
 	method Hash($ds)
 		{
-		my $str = '${';
+		my @items = '${';
 		if @($ds).elems
 			{
-			$str ~= $.pre-item-spacing;
-			$str ~= join(
+			@items.push( $.pre-item-spacing );
+			@items.push(
+				join(
 				',' ~ $.post-separator-spacing,
 				map { self.pp($_) }, sort @($ds)
+				)
 			);
-			$str ~= $.post-item-spacing;
+			@items.push( $.post-item-spacing );
 			}
 		else
 			{
-			$str ~= $.intra-group-spacing;
+			@items.push( $.intra-group-spacing );
 			}
-		$str ~= '}';
-		return $str;
+		@items.push( '}' );
+		return join( '', @items );
 		}
 
 	method Array($ds)
 		{
-		my $str = '$[';
+		my @items = '$[';
 		if @($ds).elems
 			{
-			$str ~= $.pre-item-spacing;
-			$str ~= join(
+			@items.push( $.pre-item-spacing );
+			@items.push(
+				join(
 				',' ~ $.post-separator-spacing,
 				map { self.pp($_) }, sort @($ds)
+				)
 			);
-			$str ~= $.post-item-spacing;
+			@items.push( $.post-item-spacing );
 			}
 		else
 			{
-			$str ~= $.intra-group-spacing;
+			@items.push( $.intra-group-spacing );
 			}
-		$str ~= ']';
-		return $str;
+		@items.push( ']' );
+		return join( '', @items );
 		}
 
 	method pp($ds)

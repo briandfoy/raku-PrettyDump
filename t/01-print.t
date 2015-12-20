@@ -2,10 +2,9 @@ use v6;
 use Pretty::Printer;
 use Test;
 
-plan 0;
+plan 6;
 
-my $p = Pretty::Printer.new(
-);
+my $p = Pretty::Printer.new;
 
 is $p.pp(Nil), q<Nil>, q<Empty call works.>;
 is $p.pp(Any), q<Any>, q<You can call it with (Any)thing.>;
@@ -30,9 +29,9 @@ subtest sub {
 }, 'arrayref';
 
 subtest sub {
-  is $p.pp( {} ), q<${}>, q<Empty hashref works>;
+  is $p.pp( {} ),       q<${}>, q<Empty hashref works>;
   is $p.pp( {a=>Any} ), q<${:a(Any)}>, q<As does a hashref with a single item>;
-  is $p.pp( {a=>[]} ), q<${:a($[])}>, q<And a hashref with an embedded reference.>;
+  is $p.pp( {a=>[]} ),  q<${:a($[])}>, q<And a hashref with an embedded reference.>;
 }, 'hashref';
 
 subtest sub {
