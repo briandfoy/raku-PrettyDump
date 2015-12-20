@@ -39,6 +39,7 @@ subtest sub {
 
   subtest sub {
     my $q = Pretty::Printer.new(
+      intra-group-spacing => "\n",
       pre-item-spacing => "\n",
     );
     is $q.pp( [] ),          qq<\$[\n]>,
@@ -57,6 +58,7 @@ subtest sub {
   
   subtest sub {
     my $q = Pretty::Printer.new(
+      intra-group-spacing => "\n",
       post-item-spacing => "\n",
     );
     is $q.pp( [] ),          qq<\$[\n]>,
@@ -75,6 +77,7 @@ subtest sub {
 
   subtest sub {
     my $q = Pretty::Printer.new(
+      intra-group-spacing => "\n",
       pre-item-spacing => "\n",
       post-separator-spacing => "\n",
       post-item-spacing => "\n",

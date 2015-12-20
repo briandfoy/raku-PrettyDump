@@ -66,7 +66,7 @@ class Pretty::Printer
 	has Str $.pre-item-spacing = '';
 	has Str $.pre-separator-spacing = '';
 	has Str $.intra-group-spacing = '';
-	has Str $.post-separator-spacing = '';
+	has Str $.post-separator-spacing = ' ';
 	has Str $.post-item-spacing = '';
 
 	method Pair($ds)
@@ -95,10 +95,12 @@ class Pretty::Printer
 		my $str = '${';
 		if @($ds).elems
 			{
+			$str ~= $.pre-item-spacing;
 			$str ~= join(
-				',',
+				',' ~ $.post-separator-spacing,
 				map { self.pp($_) }, sort @($ds)
 			);
+			$str ~= $.post-item-spacing;
 			}
 		else
 			{
@@ -113,10 +115,12 @@ class Pretty::Printer
 		my $str = '$[';
 		if @($ds).elems
 			{
+			$str ~= $.pre-item-spacing;
 			$str ~= join(
-				',',
+				',' ~ $.post-separator-spacing,
 				map { self.pp($_) }, sort @($ds)
 			);
+			$str ~= $.post-item-spacing;
 			}
 		else
 			{
