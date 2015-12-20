@@ -92,9 +92,27 @@ subtest sub {
                              q<Newline before close-brace>;
     is $q.pp( {1=>2} ),      qq<\$\{\n:1(2)\n}>,
                              q<And only between close-brace and first item>;
-    is $q.pp( {1=>2,3=>4} ), qq<\$\{\n:1(2),\n:3(4)\n}>,
-                             q<Even in the presence of multiple items.>;
+    is $q.pp( {1=>2,3=>4} ), q:to/EOF/.chomp, q<And multiple items.>;
+${
+:1(2),
+:3(4)
+}
+EOF
   }, 'Newlines galore';
+
+  subtest sub {
+    my $q = Pretty::Printer.new(
+      intra-group-spacing => "\n",
+      pre-item-spacing => ' ',
+      post-separator-spacing => "\n   ",
+      post-item-spacing => "\n ",
+    );
+    is $q.pp( {1=>2,3=>4} ), q:to/EOF/.chomp, q<And multiple items.>;
+${ :1(2),
+   :3(4)
+ }
+EOF
+  }, 'Sample of better formatting';
 
 }, 'Alternate formatting';
 
