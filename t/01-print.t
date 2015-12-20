@@ -5,16 +5,6 @@ use Test;
 plan 0;
 
 my $p = Pretty::Printer.new(
-  newline-after-array-start => False,
-  newline-between-array-items => False,
-  newline-before-array-end => False,
-  
-  newline-after-hash-start => False,
-  newline-between-hash-pairs => False,
-  newline-before-hash-end => False,
-  
-  whitespace-after-pair-value-start => False,
-  whitespace-before-pair-value-end => False,
 );
 
 is $p.pp(Nil), q<Nil>, q<Empty call works.>;
@@ -49,8 +39,7 @@ subtest sub {
 
   subtest sub {
     my $q = Pretty::Printer.new(
-      newline-after-array-start => True,
-      newline-after-hash-start  => True,
+      pre-item-spacing => "\n",
     );
     is $q.pp( [] ),          qq<\$[\n]>,
                              q<Newline after open-bracket>;
@@ -68,8 +57,7 @@ subtest sub {
   
   subtest sub {
     my $q = Pretty::Printer.new(
-      newline-before-array-end => True,
-      newline-before-hash-end  => True,
+      post-item-spacing => "\n",
     );
     is $q.pp( [] ),          qq<\$[\n]>,
                              q<Newline before close-bracket>;
@@ -87,13 +75,9 @@ subtest sub {
 
   subtest sub {
     my $q = Pretty::Printer.new(
-      newline-after-array-start   => True,
-      newline-between-array-items => True,
-      newline-before-array-end    => True,
-
-      newline-after-hash-start   => True,
-      newline-between-hash-pairs => True,
-      newline-before-hash-end    => True,
+      pre-item-spacing => "\n",
+      post-separator-spacing => "\n",
+      post-item-spacing => "\n",
     );
     is $q.pp( [] ),          qq<\$[\n]>,
                              q<Newline before close-bracket>;
