@@ -143,7 +143,6 @@ class Pretty::Printer
 	method pp($ds)
 		{
 		my Str $str;
-#say "Found " ~ $ds.WHAT.gist;
 		given $ds.WHAT
 			{
 			when Hash
