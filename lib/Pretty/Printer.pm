@@ -69,7 +69,19 @@ class Pretty::Printer
 	has Str $.post-separator-spacing = ' ';
 	has Str $.post-item-spacing = '';
 
-	method Pair($ds)
+	has Str $.indent-style = '';
+
+	method indent-string($str,$depth)
+		{
+		return $str unless $.indent-style ne '';
+
+		my $leading = $.indent-style xx $depth;
+		my @lines = $str.split( "\n" );
+		@lines.map: { $_ = $leading ~ $_ };
+		return @lines.join( "\n" );
+		}
+
+	method Pair($ds,$depth)
 		{
 		my $str = ':';
 		given $ds.value.WHAT
@@ -83,14 +95,14 @@ class Pretty::Printer
 				{
 				$str ~= $ds.key;
 				$str ~= '(';
-				$str ~= self.pp($ds.value);
+				$str ~= self._pp($ds.value,$depth+1);
 				$str ~= ')';
 				}
 			}
 		return $str;
 		}
 
-	method Hash($ds)
+	method Hash($ds,$depth)
 		{
 		my $str = '${';
 		if @($ds).elems
@@ -98,7 +110,7 @@ class Pretty::Printer
 			$str ~= $.pre-item-spacing;
 			$str ~= join(
 				',' ~ $.post-separator-spacing,
-				map { self.pp($_) }, sort @($ds)
+				map { self._pp($_,$depth+1) }, sort @($ds)
 			);
 			$str ~= $.post-item-spacing;
 			}
@@ -110,15 +122,17 @@ class Pretty::Printer
 		return $str;
 		}
 
-	method Array($ds)
+	method Array($ds,$depth)
 		{
 		my $str = '$[';
 		if @($ds).elems
 			{
 			$str ~= $.pre-item-spacing;
 			$str ~= join(
-				',' ~ $.post-separator-spacing,
-				map { self.pp($_) }, sort @($ds)
+				$.pre-separator-spacing ~
+				',' ~
+				$.post-separator-spacing,
+				map { self._pp($_,$depth+1) }, sort @($ds)
 			);
 			$str ~= $.post-item-spacing;
 			}
@@ -130,20 +144,25 @@ class Pretty::Printer
 		return $str;
 		}
 
-	method pp($ds)
+	method _pp($ds,$depth)
 		{
 		my Str $str;
 		given $ds.WHAT
 			{
-			when Hash    { $str ~= self.Hash($ds) }
-			when Array   { $str ~= self.Array($ds) }
-			when Pair    { $str ~= self.Pair($ds) }
+			when Hash    { $str ~= self.Hash($ds,$depth) }
+			when Array   { $str ~= self.Array($ds,$depth) }
+			when Pair    { $str ~= self.Pair($ds,$depth) }
 			when Str     { $str ~= $ds.perl }
 			when Numeric { $str ~= ~$ds }
 			when Nil     { $str ~= q{Nil} }
 			when Any     { $str ~= q{Any} }
 			}
-		return $str;
+		return self.indent-string($str,$depth);
+		}
+
+	method pp($ds)
+		{
+		return self._pp($ds,0);
 		}
 	}
 

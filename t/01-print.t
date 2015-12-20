@@ -114,6 +114,21 @@ ${ :1(2),
 EOF
   }, 'Sample of better formatting';
 
+  subtest sub {
+    my $q = Pretty::Printer.new(
+      intra-group-spacing => "\n",
+      pre-item-spacing => ' ',
+      post-separator-spacing => "\n   ",
+      post-item-spacing => "\n "
+    );
+    is $q.pp( {1=>2,3=>{4=>5}} ), q:to/EOF/.chomp, q<And multiple items.>;
+${ :1(2),
+   :3(${ :4(5)
+ })
+ }
+EOF
+  }, 'Sample of better formatting';
+
 }, 'Alternate formatting';
 
 # vim: ft=perl6
