@@ -46,16 +46,69 @@ subtest sub {
 }, 'hashref';
 
 subtest sub {
-  my $q = Pretty::Printer.new(
-    newline-after-array-start => True,
-    newline-after-hash-start => True,
-  );
-  is $q.pp( [] ), qq<\$[\n]>, q<Newline after open-bracket>;
-  is $q.pp( [1] ), qq<\$[\n1]>, q<And only between open-bracket and first item>;
-  is $q.pp( [1,2] ), qq<\$[\n1, 2]>, q<Even in the presence of multiple items.>;
-  is $q.pp( {} ), qq<\$\{\n}>, q<Newline after open-brace>;
-  is $q.pp( {1=>2} ), qq<\$\{\n:1(2)}>, q<And only between open-brace and first item>;
-  is $q.pp( {1=>2,3=>4} ), qq<\$\{\n:1(2), :3(4)}>, q<Even in the presence of multiple items.>;
-}, 'beginning newline';
+
+  subtest sub {
+    my $q = Pretty::Printer.new(
+      newline-after-array-start => True,
+      newline-after-hash-start  => True,
+    );
+    is $q.pp( [] ),          qq<\$[\n]>,
+                             q<Newline after open-bracket>;
+    is $q.pp( [1] ),         qq<\$[\n1]>,
+                             q<And only between open-bracket and first item>;
+    is $q.pp( [1,2] ),       qq<\$[\n1, 2]>,
+                             q<Even in the presence of multiple items.>;
+    is $q.pp( {} ),          qq<\$\{\n}>,
+                             q<Newline after open-brace>;
+    is $q.pp( {1=>2 } ),     qq<\$\{\n:1(2)}>,
+                             q<And only between open-brace and first item>;
+    is $q.pp( {1=>2,3=>4} ), qq<\$\{\n:1(2), :3(4)}>,
+                             q<Even in the presence of multiple items.>;
+  }, 'beginning newline';
+  
+  subtest sub {
+    my $q = Pretty::Printer.new(
+      newline-before-array-end => True,
+      newline-before-hash-end  => True,
+    );
+    is $q.pp( [] ),          qq<\$[\n]>,
+                             q<Newline before close-bracket>;
+    is $q.pp( [1] ),         qq<\$[1\n]>,
+                             q<And only between close-bracket and first item>;
+    is $q.pp( [1,2] ),       qq<\$[1, 2\n]>,
+                             q<Even in the presence of multiple items.>;
+    is $q.pp( {} ),          qq<\$\{\n}>,
+                             q<Newline before close-brace>;
+    is $q.pp( {1=>2} ),      qq<\$\{:1(2)\n}>,
+                             q<And only between close-brace and first item>;
+    is $q.pp( {1=>2,3=>4} ), qq<\$\{:1(2), :3(4)\n}>,
+                             q<Even in the presence of multiple items.>;
+  }, 'ending newline';
+
+  subtest sub {
+    my $q = Pretty::Printer.new(
+      newline-after-array-start   => True,
+      newline-between-array-items => True,
+      newline-before-array-end    => True,
+
+      newline-after-hash-start   => True,
+      newline-between-hash-pairs => True,
+      newline-before-hash-end    => True,
+    );
+    is $q.pp( [] ),          qq<\$[\n]>,
+                             q<Newline before close-bracket>;
+    is $q.pp( [1] ),         qq<\$[\n1\n]>,
+                             q<And only between close-bracket and first item>;
+    is $q.pp( [1,2] ),       qq<\$[\n1,\n2\n]>,
+                             q<Even in the presence of multiple items.>;
+    is $q.pp( {} ),          qq<\$\{\n}>,
+                             q<Newline before close-brace>;
+    is $q.pp( {1=>2} ),      qq<\$\{\n:1(2)\n}>,
+                             q<And only between close-brace and first item>;
+    is $q.pp( {1=>2,3=>4} ), qq<\$\{\n:1(2),\n:3(4)\n}>,
+                             q<Even in the presence of multiple items.>;
+  }, 'Newlines galore';
+
+}, 'Alternate formatting';
 
 # vim: ft=perl6

@@ -130,16 +130,18 @@ class 	int 	Integer (native storage; machine precision)
 
 class Pretty::Printer
 	{
-#	has $!newline-after-array-start = True;
-#	has $!newline-between-array-items = True;
-#	has $!newline-before-array-end = True;
-#
-#	has $!newline-after-hash-start = True;
-#	has $!newline-between-hash-pairs = True;
-#	has $!newline-before-hash-end = True;
-#
-#	has $!whitespace-after-pair-value-start = True;
-#	has $!whitespace-before-pair-value-end = True;
+#`(
+	has $.newline-after-array-start = True;
+	has $.newline-between-array-items = True;
+	has $.newline-before-array-end = True;
+
+	has $.newline-after-hash-start = True;
+	has $.newline-between-hash-pairs = True;
+	has $.newline-before-hash-end = True;
+
+	has $.whitespace-after-pair-value-start = True;
+	has $.whitespace-before-pair-value-end = True;
+)
 
 	has $.newline-after-array-start = False;
 	has $.newline-between-array-items = False;
@@ -179,13 +181,21 @@ class Pretty::Printer
 	method Hash($ds)
 		{
 		my $str = '${';
-		$str ~= "\n" if $!newline-after-hash-start;
-		$str ~= join(
-			',' ~
-			($!newline-between-hash-pairs ?? "\n" !! ' '),
-			map { self.pp($_) }, sort @($ds)
-		);
-		$str ~= "\n" if $!newline-before-hash-end;
+		if @($ds).elems
+			{
+			$str ~= "\n" if $!newline-after-hash-start;
+			$str ~= join(
+				',' ~
+				($!newline-between-hash-pairs ?? "\n" !! ' '),
+				map { self.pp($_) }, sort @($ds)
+			);
+			$str ~= "\n" if $!newline-before-hash-end and @($ds).elems > 0;
+			}
+		else
+			{
+			$str ~= "\n" if $!newline-before-hash-end or
+					$!newline-after-hash-start;
+			}
 		$str ~= '}';
 		return $str;
 		}
@@ -193,13 +203,21 @@ class Pretty::Printer
 	method Array($ds)
 		{
 		my $str = '$[';
-		$str ~= "\n" if $!newline-after-array-start;
-		$str ~= join(
-			',' ~
-			($!newline-between-array-items ?? "\n" !! ' '),
-			map { self.pp($_) }, @($ds)
-		);
-		$str ~= "\n" if $!newline-before-array-end;
+		if @($ds).elems
+			{
+			$str ~= "\n" if $!newline-after-array-start;
+			$str ~= join(
+				',' ~
+				($!newline-between-array-items ?? "\n" !! ' '),
+				map { self.pp($_) }, sort @($ds)
+			);
+			$str ~= "\n" if $!newline-before-array-end and @($ds).elems > 0;
+			}
+		else
+			{
+			$str ~= "\n" if $!newline-before-array-end or
+					$!newline-after-array-start;
+			}
 		$str ~= ']';
 		return $str;
 		}
@@ -209,8 +227,8 @@ class Pretty::Printer
 		my Str $str;
 		given $ds.WHAT
 			{
-			when Hash { $str ~= self.Hash($ds) }
-			when Array { $str ~= self.Array($ds) }
+			when Hash    { $str ~= self.Hash($ds) }
+			when Array   { $str ~= self.Array($ds) }
 			when Pair    { $str ~= self.Pair($ds) }
 			when Str     { $str ~= $ds.perl }
 			when Numeric { $str ~= ~$ds }
