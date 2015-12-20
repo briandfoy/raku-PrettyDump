@@ -130,80 +130,92 @@ class 	int 	Integer (native storage; machine precision)
 
 class Pretty::Printer
 	{
-	has $!newline-after-array-start = False;
-	has $!newline-between-array-items = False;
-	has $!newline-before-array-end = False;
+#	has $!newline-after-array-start = True;
+#	has $!newline-between-array-items = True;
+#	has $!newline-before-array-end = True;
+#
+#	has $!newline-after-hash-start = True;
+#	has $!newline-between-hash-pairs = True;
+#	has $!newline-before-hash-end = True;
+#
+#	has $!whitespace-after-pair-value-start = True;
+#	has $!whitespace-before-pair-value-end = True;
 
-	has $!newline-after-hash-start = False;
-	has $!newline-between-hash-pairs = False;
-	has $!newline-before-hash-end = False;
+	has $.newline-after-array-start = False;
+	has $.newline-between-array-items = False;
+	has $.newline-before-array-end = False;
 
-	has $!whitespace-after-pair-value-start = False;
-	has $!whitespace-before-pair-value-end = False;
+	has $.newline-after-hash-start = False;
+	has $.newline-between-hash-pairs = False;
+	has $.newline-before-hash-end = False;
+
+	has $.whitespace-after-pair-value-start = False;
+	has $.whitespace-before-pair-value-end = False;
+
+	method Pair($ds)
+		{
+		my $str = ':';
+		given $ds.value.WHAT
+			{
+			when Bool
+	 			{
+				$str ~= '!' unless $ds.value;
+				$str ~= $ds.key
+				}
+			default
+				{
+				$str ~= $ds.key;
+				$str ~= '(';
+				$str ~= ' ' if $!whitespace-after-pair-value-start;
+#if $ds.key eq 'content' { say $ds.value.WHAT }
+				$str ~= self.pp($ds.value);
+				$str ~= ' ' if $!whitespace-before-pair-value-end;
+				$str ~= ')';
+				}
+			}
+		return $str;
+		}
+
+	method Hash($ds)
+		{
+		my $str = '${';
+		$str ~= "\n" if $!newline-after-hash-start;
+		$str ~= join(
+			',' ~
+			($!newline-between-hash-pairs ?? "\n" !! ' '),
+			map { self.pp($_) }, sort @($ds)
+		);
+		$str ~= "\n" if $!newline-before-hash-end;
+		$str ~= '}';
+		return $str;
+		}
+
+	method Array($ds)
+		{
+		my $str = '$[';
+		$str ~= "\n" if $!newline-after-array-start;
+		$str ~= join(
+			',' ~
+			($!newline-between-array-items ?? "\n" !! ' '),
+			map { self.pp($_) }, @($ds)
+		);
+		$str ~= "\n" if $!newline-before-array-end;
+		$str ~= ']';
+		return $str;
+		}
+
 	method pp($ds)
 		{
 		my Str $str;
 		given $ds.WHAT
 			{
-			when Hash
-				{
-				$str = '${';
-				$str ~= ($!newline-after-hash-start ?? "\n" !! '');
-				$str ~= join(
-					',' ~
-					($!newline-between-hash-pairs ?? "\n" !! ' '),
-					map { self.pp($_) }, sort @($ds)
-				);
-				$str ~= ($!newline-before-hash-end ?? "\n" !! '');
-				$str ~= '}';
-				return $str;
-				}
-			when Array
-				{
-				$str = '$[';
-				$str ~= ($!newline-after-array-start ?? "\n" !! '');
-				$str ~= join(
-					',' ~
-					($!newline-between-array-items ?? "\n" !! ' '),
-					map { self.pp($_) }, @($ds)
-					#@($ds)
-				);
-				$str ~= ($!newline-before-array-end ?? "\n" !! '');
-				$str ~= ']';
-				return $str;
-				}
-			when Pair
-				{
-				$str ~= ':';
-				given $ds.value.WHAT
-					{
-					when Bool
-						{
-						if !$ds.value
-							{
-							$str ~= '!'
-							}
-						$str ~= $ds.key
-						}
-					default
-						{
-						$str ~= $ds.key;
-						$str ~= '(';
-						$str ~= ($!whitespace-after-pair-value-start ?? ' ' !! '');
-#if $ds.key eq 'content' { say $ds.value.WHAT }
-						$str ~= self.pp($ds.value);
-						$str ~= ($!whitespace-before-pair-value-end ?? ' ' !! '');
-						$str ~= ')';
-						}
-					}
-				}
-			when Str
-				{
-				$str ~= $ds.perl;
-				}
+			when Hash { $str ~= self.Hash($ds) }
+			when Array { $str ~= self.Array($ds) }
+			when Pair    { $str ~= self.Pair($ds) }
+			when Str     { $str ~= $ds.perl }
 			when Numeric { $str ~= ~$ds }
-			when Nil { $str ~= q{Nil} }
-			when Any { $str ~= q{Any} }
+			when Nil     { $str ~= q{Nil} }
+			when Any     { $str ~= q{Any} }
 			}
 		return $str;
 		}
