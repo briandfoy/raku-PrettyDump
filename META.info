@@ -1,9 +1,7 @@
 {
 	"name"        : "Pretty::Printer",
 	"version"     : "*",
-	"description" : "Pretty-printer for Perl6 data structures"
-	"depends"     : [
-	],
+	"description" : "Pretty-printer for Perl6 data structures",
 	"provides"    : {
 		"Pretty::Printer"        : "lib/Pretty/Printer.pm"
 	},
