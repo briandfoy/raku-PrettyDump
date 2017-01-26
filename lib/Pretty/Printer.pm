@@ -105,19 +105,7 @@ class Pretty::Printer
 	method Hash($ds,$depth)
 		{
 		my $str = '${';
-		if @($ds).elems
-			{
-			$str ~= $.pre-item-spacing;
-			$str ~= join(
-				',' ~ $.post-separator-spacing,
-				map { self._pp($_,$depth+1) }, sort @($ds)
-			);
-			$str ~= $.post-item-spacing;
-			}
-		else
-			{
-			$str ~= $.intra-group-spacing;
-			}
+		$str ~= self._structure($ds,$depth);
 		$str ~= '}';
 		return $str;
 		}
@@ -125,6 +113,22 @@ class Pretty::Printer
 	method Array($ds,$depth)
 		{
 		my $str = '$[';
+		$str ~= self._structure($ds,$depth);
+		$str ~= ']';
+		return $str;
+		}
+
+	method List($ds,$depth)
+		{
+		my $str = '$(';
+		$str ~= self._structure($ds,$depth);
+		$str ~= ')';
+		return $str;
+		}
+
+	method _structure($ds,$depth)
+		{
+		my $str;
 		if @($ds).elems
 			{
 			$str ~= $.pre-item-spacing;
@@ -140,8 +144,34 @@ class Pretty::Printer
 			{
 			$str ~= $.intra-group-spacing;
 			}
-		$str ~= ']';
 		return $str;
+		}
+
+	method Map($ds,$depth)
+		{
+		my $str = qq/Map.new(/;
+		for $ds.pairs -> $pair {
+			$str ~= "\n" ~ self.Pair($pair,$depth+1);
+			}
+		$str ~= ")";
+		return self.indent-string($str,$depth+1);
+		}
+
+	method Match($ds,$depth)
+		{
+		my $str = Q/Match.new(/;
+		my $hash = {
+			ast  => $ds.made,
+			to   => $ds.to,
+			from => $ds.from,
+			orig => $ds.orig,
+			hash => $ds.hash,
+			list => $ds.list,
+			};
+
+		$str ~= self.Hash( $hash, $depth+1 );
+		$str ~= ')';
+		return self.indent-string($str,$depth);
 		}
 
 	method _pp($ds,$depth)
@@ -149,9 +179,13 @@ class Pretty::Printer
 		my Str $str;
 		given $ds.WHAT
 			{
-			when Hash    { $str ~= self.Hash($ds,$depth) }
+			# be very careful here. Check more derived types first.
+			when Match   { $str ~= self.Match($ds,$depth) }
+			when Hash    { $str ~= self.Hash($ds,$depth)  }
 			when Array   { $str ~= self.Array($ds,$depth) }
-			when Pair    { $str ~= self.Pair($ds,$depth) }
+			when Map     { $str ~= self.Map($ds,$depth) }
+			when List    { $str ~= self.List($ds,$depth) }
+			when Pair    { $str ~= self.Pair($ds,$depth)  }
 			when Str     { $str ~= $ds.perl }
 			when Numeric { $str ~= ~$ds }
 			when Nil     { $str ~= q{Nil} }
