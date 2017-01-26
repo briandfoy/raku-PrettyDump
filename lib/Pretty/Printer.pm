@@ -25,7 +25,7 @@ The various settings work like this:
 
 =item intra-group-spacing
 
-Defines the spacing inserted inside (empty) C<${}> and C<$[]> constructs. 
+Defines the spacing inserted inside (empty) C<${}> and C<$[]> constructs.
 
 =cut
 
