@@ -95,7 +95,7 @@ class Pretty::Printer
 				{
 				$str ~= $ds.key;
 				$str ~= '(';
-				$str ~= self._pp($ds.value,$depth+1);
+				$str ~= self._pp($ds.value,0).trim;
 				$str ~= ')';
 				}
 			}
