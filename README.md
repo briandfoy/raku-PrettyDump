@@ -6,16 +6,16 @@ perl6-pp provides a configurable pretty-printer for Perl6 data structures.
 Installation
 ============
 
-* Using panda (a module management tool bundled with Rakudo Star):
+* Using zef (a module management tool bundled with Rakudo Star):
 
 ```
-    panda update && panda install Pretty::Printer
+    zef install Pretty::Printer
 ```
 
 * Using ufo (a project Makefile creation script bundled with Rakudo Star) and make:
 
 ```
-    ufo                    
+    ufo
     make
     make test
     make install
@@ -26,7 +26,7 @@ Installation
 To run tests:
 
 ```
-    prove -e perl6
+    prove -e "perl6 -Ilib"
 ```
 
 ## Author
