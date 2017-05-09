@@ -1,17 +1,19 @@
 =begin pod
 
-=head1 Pretty::Printer
+=head1 NAME
 
-C<Pretty::Printer> pretty-prints a Perl6 data structure.
+PrettyDump - represent a Perl 6 data structure in a human readable way
 
 =head1 Synopsis
 
-    use Pretty::Printer; # Next version will export non-OO version
+    use PrettyDump;
 
     my $ds = { a => 1 };
 
-    my $pp = Pretty::Printer.new( after-opening-brace => True );
-    say $p.pp( $ds ); # '{:a(1)}'
+    my $pretty = PrettyDump.new(
+    	after-opening-brace => True
+    	);
+    say $pretty.dump: $ds; # '{:a(1)}'
 
 =head1 Documentation
 
@@ -61,11 +63,11 @@ use v6;
 
 ###############################################################################
 
-class Pretty::Printer
 	{
 	has Str $.pre-item-spacing = '';
 	has Str $.pre-separator-spacing = '';
 	has Str $.intra-group-spacing = '';
+class PrettyDumper {
 	has Str $.post-separator-spacing = ' ';
 	has Str $.post-item-spacing = '';
 
