@@ -138,10 +138,11 @@ class PrettyDump {
 				$str ~= "{$ds.key}(Mu)";
 				}
 			default {
-				$str ~= $ds.key;
-				$str ~= '(';
-				$str ~= self.dump( $ds.value, 0 ).trim;
-				$str ~= ')';
+				$str ~= [~]
+					$ds.key,
+					'(',
+					self.dump( $ds.value, 0 ).trim,
+					')';
 				}
 			}
 		return $str;
