@@ -184,10 +184,9 @@ class PrettyDump {
 	method Map ( $ds, $depth ) {
 		my $str = qq/Map.new(/;
 		for $ds.pairs -> $pair {
-			$str ~= "\n" ~ self.Pair: $pair, $depth+1;
+			$str ~= "\n" ~ self.Pair: $pair, $depth;
 			}
 		$str ~= ")";
-		return self.indent-string: $str, $depth+1;
 		}
 
 	method Match ( $ds, $depth ) {
@@ -201,9 +200,8 @@ class PrettyDump {
 			list => $ds.list,
 			pos  => $ds.pos,
 			};
-		$str ~= self._structure: $hash, $depth+1;
+		$str ~= self._structure: $hash, $depth;
 		$str ~= ')';
-		return self.indent-string: $str, $depth;
 		}
 
 	method Numeric ( $ds, $depth ) { $ds.Str }
