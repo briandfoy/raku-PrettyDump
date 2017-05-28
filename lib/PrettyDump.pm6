@@ -182,11 +182,7 @@ class PrettyDump {
 		}
 
 	method Map ( $ds, $depth ) {
-		my $str = qq/Map.new(/;
-		for $ds.pairs -> $pair {
-			$str ~= "\n" ~ self.Pair: $pair, $depth;
-			}
-		$str ~= ")";
+		[~] q/Map.new(/, self!structure( $ds, $depth ), ')';
 		}
 
 	method Match ( $ds, $depth ) {
