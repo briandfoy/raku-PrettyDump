@@ -92,15 +92,16 @@ use v6;
 
 ###############################################################################
 
-	{
-	has Str $.pre-item-spacing = '';
-	has Str $.pre-separator-spacing = '';
-	has Str $.intra-group-spacing = '';
-class PrettyDumper {
-	has Str $.post-separator-spacing = ' ';
-	has Str $.post-item-spacing = '';
 
-	has Str $.indent-style = '';
+class PrettyDumper {
+	has Str $.pre-item-spacing       = "\n";
+	has Str $.post-item-spacing      = "\n";
+
+	has Str $.pre-separator-spacing  = '';
+	has Str $.intra-group-spacing    = '';
+	has Str $.post-separator-spacing = ' ';
+
+	has Str $.indent                 = "\t";
 
 	method indent-string($str,$depth)
 		{
