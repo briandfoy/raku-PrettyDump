@@ -124,11 +124,7 @@ class PrettyDump {
 
 	method indent-string ( $str, $depth ) {
 		return $str unless $.indent ne '';
-
-		my $leading = $.indent xx $depth;
-		my @lines = $str.split: "\n";
-		@lines.map: { $_ = $leading ~ $_ };
-		return @lines.join: "\n";
+		return $str.subst: /^^/, $.indent x $depth, :g;
 		}
 
 	method Pair ( $ds, $depth ) {
