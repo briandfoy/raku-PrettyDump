@@ -103,31 +103,26 @@ class PrettyDumper {
 
 	has Str $.indent                 = "\t";
 
-	method indent-string($str,$depth)
-		{
-		return $str unless $.indent-style ne '';
+	method indent-string ( $str, $depth ) {
+		return $str unless $.indent ne '';
 
-		my $leading = $.indent-style xx $depth;
-		my @lines = $str.split( "\n" );
+		my $leading = $.indent xx $depth;
+		my @lines = $str.split: "\n";
 		@lines.map: { $_ = $leading ~ $_ };
-		return @lines.join( "\n" );
+		return @lines.join: "\n";
 		}
 
-	method Pair($ds,$depth)
-		{
+	method Pair ( $ds, $depth ) {
 		my $str = ':';
-		given $ds.value.WHAT
-			{
-			when Bool
-	 			{
+		given $ds.value.WHAT {
+			when Bool {
 				$str ~= '!' unless $ds.value;
 				$str ~= $ds.key
 				}
-			default
-				{
+			default {
 				$str ~= $ds.key;
 				$str ~= '(';
-				$str ~= self._pp($ds.value,0).trim;
+				$str ~= self.pretty-dump( $ds.value, 0 ).trim;
 				$str ~= ')';
 				}
 			}
