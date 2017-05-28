@@ -145,39 +145,34 @@ class PrettyDumper {
 		return $start ~ self._structure( $ds, $depth ) ~ $end;
 		}
 
-	method _structure($ds,$depth)
-		{
+	method _structure ( $ds, $depth ) {
 		my $str;
-		if @($ds).elems
-			{
+		if @($ds).elems {
 			$str ~= $.pre-item-spacing;
 			$str ~= join(
 				$.pre-separator-spacing ~
 				',' ~
 				$.post-separator-spacing,
-				map { self._pp($_,$depth+1) }, sort @($ds)
-			);
+				map { self.dump: $_, $depth+1 }, sort @($ds)
+				);
 			$str ~= $.post-item-spacing;
 			}
-		else
-			{
+		else {
 			$str ~= $.intra-group-spacing;
 			}
 		return $str;
 		}
 
-	method Map($ds,$depth)
-		{
+	method Map ( $ds, $depth ) {
 		my $str = qq/Map.new(/;
 		for $ds.pairs -> $pair {
-			$str ~= "\n" ~ self.Pair($pair,$depth+1);
+			$str ~= "\n" ~ self.Pair: $pair, $depth+1;
 			}
 		$str ~= ")";
-		return self.indent-string($str,$depth+1);
+		return self.indent-string: $str, $depth+1;
 		}
 
-	method Match($ds,$depth)
-		{
+	method Match ( $ds, $depth ) {
 		my $str = Q/Match.new(/;
 		my $hash = {
 			ast  => $ds.made,
@@ -188,9 +183,9 @@ class PrettyDumper {
 			list => $ds.list,
 			};
 
-		$str ~= self.Hash( $hash, $depth+1 );
+		$str ~= self.Hash: $hash, $depth+1;
 		$str ~= ')';
-		return self.indent-string($str,$depth);
+		return self.indent-string: $str, $depth;
 		}
 
 	method _pp($ds,$depth)
