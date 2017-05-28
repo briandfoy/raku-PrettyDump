@@ -93,7 +93,7 @@ use v6;
 ###############################################################################
 
 
-class PrettyDumper {
+class PrettyDump {
 	has Str $.pre-item-spacing       = "\n";
 	has Str $.post-item-spacing      = "\n";
 
