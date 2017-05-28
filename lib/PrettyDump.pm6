@@ -209,7 +209,7 @@ class PrettyDump {
 			hash => $ds.hash,
 			list => $ds.list,
 			};
-		$str ~= self.Hash: $hash, $depth+1;
+		$str ~= self._structure: $hash, $depth+1;
 		$str ~= ')';
 		return self.indent-string: $str, $depth;
 		}
