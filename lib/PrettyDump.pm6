@@ -239,7 +239,7 @@ class PrettyDump {
 		:$post-item-spacing      = "\n",
 		:$pre-separator-spacing  = '',
 		:$intra-group-spacing    = '',
-		:$post-separator-spacing = ' ',
+		:$post-separator-spacing = "\n",
 		:$indent                 = "\t",
 		) is export {
 		my $pretty = PrettyDump.new:
