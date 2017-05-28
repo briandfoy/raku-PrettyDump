@@ -128,11 +128,6 @@ class PrettyDump {
 		}
 
 	method Pair ( $ds, $depth ) {
-	put "In pair. Got ", $ds.^name;
-	put "key is ", $ds.key;
-	my $what = $ds.value.^name;
-	put "in Pair, WHAT is $what";
-	put "\$what is {$what.^name}";
 		my $str = ':';
 		given $ds.value.^name {
 			when "Bool" {
@@ -220,7 +215,6 @@ class PrettyDump {
 	method NQPMu ( $ds, $depth ) { q/Mu/  }
 
 	method dump ( $ds, $depth = 0 ) {
-		put "In dump. Got ", $ds.^name;
 		my Str $str;
 
 		if $ds.can: 'PrettyDump' {
@@ -248,7 +242,6 @@ class PrettyDump {
 		:$post-separator-spacing = ' ',
 		:$indent                 = "\t",
 		) is export {
-		say "Got: " ~ $ds.^name;
 		my $pretty = PrettyDump.new:
 			:indent\                 ($indent),
 			:pre-item-spacing\       ($pre-item-spacing),
