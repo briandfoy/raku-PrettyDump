@@ -160,7 +160,7 @@ class PrettyDump {
 		}
 
 	method balanced ( $start, $end, $ds, $depth ) {
-		return $start ~ self._structure( $ds, $depth ) ~ $end;
+		return [~] $start, self.structure( $ds, $depth ), $end;
 		}
 
 	method _structure ( $ds, $depth ) {
