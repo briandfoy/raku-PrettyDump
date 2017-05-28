@@ -231,5 +231,3 @@ class PrettyDumper {
 		return self._pp($ds,0);
 		}
 	}
-
-# vim: ft=perl6
