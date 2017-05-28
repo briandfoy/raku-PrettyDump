@@ -77,7 +77,8 @@ C<${}> and C<$[]> constructs.
 
 brian d foy, C<< <bdfoy@cpan.org> >>.
 
-This module started as L<Pretty::Printer> from Jeff Goff,
+This module started as L<Pretty::Printer> from Jeff Goff, which you
+can find at L<https://github.com/drforr/perl6-pp>
 
 =head1 COPYRIGHT
 
