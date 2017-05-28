@@ -218,4 +218,24 @@ class PrettyDump {
 
 		return self.indent-string: $str, $depth;
 		}
+
+	sub pretty-dump ( $ds,
+		:$pre-item-spacing       = "\n",
+		:$post-item-spacing      = "\n",
+		:$pre-separator-spacing  = '',
+		:$intra-group-spacing    = '',
+		:$post-separator-spacing = ' ',
+		:$indent                 = "\t",
+		) is export {
+		my $pretty = PrettyDump.new:
+			:indent($indent),
+			:pre-item-spacing($pre-item-spacing),
+			:post-item-spacing($post-item-spacing),
+			:pre-separator-spacing($pre-separator-spacing),
+			:intra-group-spacing($intra-group-spacing),
+			:post-separator-spacing($post-separator-spacing),
+			;
+
+		$pretty.dump: $ds;
+		}
 	}
