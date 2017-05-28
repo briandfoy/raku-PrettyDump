@@ -190,7 +190,6 @@ class PrettyDump {
 		return self.indent-string: $str, $depth+1;
 		}
 
-			pos  => $ds.pos,
 	method Match ( $ds, $depth ) {
 		my $str = Q/Match.new(/;
 		my $hash = {
@@ -200,6 +199,7 @@ class PrettyDump {
 			orig => $ds.orig,
 			hash => $ds.hash,
 			list => $ds.list,
+			pos  => $ds.pos,
 			};
 		$str ~= self._structure: $hash, $depth+1;
 		$str ~= ')';
