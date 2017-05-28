@@ -9,6 +9,7 @@ PrettyDump - represent a Perl 6 data structure in a human readable way
     use PrettyDump;
 
     my $ds = { a => 1 };
+    my $pretty = PrettyDump.new:
 
     my $pretty = PrettyDump.new(
     	after-opening-brace => True
@@ -122,7 +123,7 @@ class PrettyDump {
 			default {
 				$str ~= $ds.key;
 				$str ~= '(';
-				$str ~= self.pretty-dump( $ds.value, 0 ).trim;
+				$str ~= self.dump( $ds.value, 0 ).trim;
 				$str ~= ')';
 				}
 			}
