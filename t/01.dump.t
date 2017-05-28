@@ -126,7 +126,6 @@ subtest {
 			post-separator-spacing => "\n   ",
 			post-item-spacing      => "\n "
 			);
-
 		is $q.dump( {1=>2,3=>{4=>5}} ), qq:to/EOF/.chomp, q<And multiple items.>;
 			\$\{ \t:1(2),
 			   \t:3(\$\{ \t:4(5)
