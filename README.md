@@ -1,38 +1,35 @@
-pp
-=======
+[![AppVeyor status](https://ci.appveyor.com/api/projects/status/m7fjcqjmoue0wssu?svg=true)](https://ci.appveyor.com/project/briandfoy/perl6-prettydump)
 
-perl6-pp provides a configurable pretty-printer for Perl6 data structures.
+[![Travis status](https://travis-ci.org/briandfoy/perl6-PrettyDump.svg?branch=master)](https://travis-ci.org/briandfoy/perl6-PrettyDump)
 
-Installation
-============
+# The Perl 6 PrettyDump module
 
-* Using zef (a module management tool bundled with Rakudo Star):
+When you want to look at your Perl 6 data structure, you probably want
+something nicer than `.perl` or `.gist`.
 
-```
-    zef install Pretty::Printer
-```
 
-* Using ufo (a project Makefile creation script bundled with Rakudo Star) and make:
+## Installation
 
-```
-    ufo
-    make
-    make test
-    make install
-```
+Install it with [zef](https://github.com/ugexe/zef), which comes with
+the latest [Rakudo Star](http://rakudo.org/how-to-get-rakudo/):
 
-## Testing
+	zef install PrettyDump
 
-To run tests:
+You can also checkout the [latest sources](https://github.com/briandfoy/perl6-PrettyDump), then install from that directory:
 
-```
-    prove -e "perl6 -Ilib"
-```
+	zef install .
 
-## Author
+## Contributing
 
-Jeffrey Goff, DrForr on #perl6, https://github.com/drforr/
+Fork the [perl6-PrettyDump](https://github.com/briandfoy/perl6-PrettyDump), edit, commit, and send a pull request!
 
-## License
+If it's something non-trivial, you might consider [opening an issue](https://github.com/briandfoy/perl6-PrettyDump/issues) first.
+
+# Author
+
+brian d foy, based off a the [perl-pp](https://github.com/drforr/perl6-pp) module from
+[Jeffrey Goff](https://github.com/drforr/).
+
+# License
 
 Artistic License 2.0
