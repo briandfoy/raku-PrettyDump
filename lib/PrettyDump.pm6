@@ -132,11 +132,19 @@ class PrettyDump {
 		}
 
 	method Pair ( $ds, $depth ) {
+	put "In pair. Got ", $ds.^name;
+	put "key is ", $ds.key;
+	my $what = $ds.value.^name;
+	put "in Pair, WHAT is $what";
+	put "\$what is {$what.^name}";
 		my $str = ':';
-		given $ds.value.WHAT {
-			when Bool {
+		given $what {
+			when "Bool" {
 				$str ~= '!' unless $ds.value;
 				$str ~= $ds.key
+				}
+			when "NQPMu" {
+				$str ~= "(Mu)";
 				}
 			default {
 				$str ~= $ds.key;
@@ -148,7 +156,7 @@ class PrettyDump {
 		return $str;
 		}
 
-	method Hash ($ds,$depth) {
+	method Hash ( $ds, $depth ) {
 		self.balanced:  '${', '}', $ds, $depth;
 		}
 
@@ -201,32 +209,35 @@ class PrettyDump {
 			hash => $ds.hash,
 			list => $ds.list,
 			};
-
 		$str ~= self.Hash: $hash, $depth+1;
 		$str ~= ')';
 		return self.indent-string: $str, $depth;
 		}
 
+	method Numeric ( $ds, $depth ) { $ds.Str }
+
+	method Str   ( $ds, $depth ) { $ds.perl }
+	method Nil   ( $ds, $depth ) { q/Nil/ }
+	method Any   ( $ds, $depth ) { q/Any/ }
+	method Mu    ( $ds, $depth ) { q/Mu/  }
+	method NQPMu ( $ds, $depth ) { q/Mu/  }
+
 	method dump ( $ds, $depth = 0 ) {
+		put "In dump. Got ", $ds.^name;
 		my Str $str;
 
 		if $ds.can: 'PrettyDump' {
 			$str ~= $ds.PrettyDump: self;
 			}
+		elsif $ds ~~ Numeric {
+			$str ~= self.Numeric: $ds, $depth;
+			}
+		elsif self.can: $ds.^name {
+			my $what = $ds.^name;
+			$str ~= self."$what"( $ds, $depth );
+			}
 		else {
-			given $ds.WHAT {
-				# be very careful here. Check more derived types first.
-				when Match   { $str ~= self.Match: $ds, $depth }
-				when Hash    { $str ~= self.Hash:  $ds, $depth }
-				when Array   { $str ~= self.Array: $ds, $depth }
-				when Map     { $str ~= self.Map:   $ds, $depth }
-				when List    { $str ~= self.List:  $ds, $depth }
-				when Pair    { $str ~= self.Pair:  $ds, $depth }
-				when Str     { $str ~= $ds.perl }
-				when Numeric { $str ~= $ds.Str }
-				when Nil     { $str ~= q{Nil} }
-				when Any     { $str ~= q{Any} }
-				}
+			die "Could not handle " ~ $ds.perl;
 			}
 
 		return self.indent-string: $str, $depth;
@@ -240,13 +251,14 @@ class PrettyDump {
 		:$post-separator-spacing = ' ',
 		:$indent                 = "\t",
 		) is export {
+		say "Got: " ~ $ds.^name;
 		my $pretty = PrettyDump.new:
-			:indent($indent),
-			:pre-item-spacing($pre-item-spacing),
-			:post-item-spacing($post-item-spacing),
-			:pre-separator-spacing($pre-separator-spacing),
-			:intra-group-spacing($intra-group-spacing),
-			:post-separator-spacing($post-separator-spacing),
+			:indent\                 ($indent),
+			:pre-item-spacing\       ($pre-item-spacing),
+			:post-item-spacing\      ($post-item-spacing),
+			:pre-separator-spacing\  ($pre-separator-spacing),
+			:intra-group-spacing\    ($intra-group-spacing),
+			:post-separator-spacing\ ($post-separator-spacing),
 			;
 
 		$pretty.dump: $ds;
