@@ -115,7 +115,7 @@ C<${}> and C<$[]> constructs. The default is the empty string.
 =item post-separator-spacing
 
 The spacing inserted just after the comma separator of non-empty
-C<${}> and C<$[]> constructs.
+C<${}> and C<$[]> constructs. Defaults to a newline.
 
 =head1 AUTHOR
 
@@ -149,7 +149,7 @@ class PrettyDump {
 
 	has Str $.pre-separator-spacing  = '';
 	has Str $.intra-group-spacing    = '';
-	has Str $.post-separator-spacing = ' ';
+	has Str $.post-separator-spacing = "\n";
 
 	has Str $.indent                 = "\t";
 

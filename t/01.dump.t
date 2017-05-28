@@ -51,13 +51,13 @@ subtest {
 								 q<Newline after open-bracket>;
 		is $q.dump( [1] ),         qq<\$[\n\t1\n]>,
 								 q<And only between open-bracket and first item>;
-		is $q.dump( [1,2] ),       qq<\$[\n\t1, \t2\n]>,
+		is $q.dump( [1,2] ),       qq<\$[\n\t1,\n\t2\n]>,
 								 q<Even in the presence of multiple items.>;
 		is $q.dump( {} ),          qq<\$\{\n}>,
 								 q<Newline after open-brace>;
 		is $q.dump( {1=>2 } ),     qq<\$\{\n\t:1(2)\n}>,
 								 q<And only between open-brace and first item>;
-		is $q.dump( {1=>2,3=>4} ), qq<\$\{\n\t:1(2), \t:3(4)\n}>,
+		is $q.dump( {1=>2,3=>4} ), qq<\$\{\n\t:1(2),\n\t:3(4)\n}>,
 								 q<Even in the presence of multiple items.>;
 		}, 'beginning newline';
 
@@ -70,13 +70,13 @@ subtest {
 								 q<Newline before close-bracket>;
 		is $q.dump( [1] ),         qq<\$[\n\t1\n]>,
 								 q<And only between close-bracket and first item>;
-		is $q.dump( [1,2] ),       qq<\$[\n\t1, \t2\n]>,
+		is $q.dump( [1,2] ),       qq<\$[\n\t1,\n\t2\n]>,
 								 q<Even in the presence of multiple items.>;
 		is $q.dump( {} ),          qq<\$\{\n}>,
 								 q<Newline before close-brace>;
 		is $q.dump( {1=>2} ),      qq<\$\{\n\t:1(2)\n}>,
 								 q<And only between close-brace and first item>;
-		is $q.dump( {1=>2,3=>4} ), qq<\$\{\n\t:1(2), \t:3(4)\n}>,
+		is $q.dump( {1=>2,3=>4} ), qq<\$\{\n\t:1(2),\n\t:3(4)\n}>,
 								 q<Even in the presence of multiple items.>;
   }, 'ending newline';
 
