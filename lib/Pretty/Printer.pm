@@ -188,28 +188,28 @@ class PrettyDumper {
 		return self.indent-string: $str, $depth;
 		}
 
-	method _pp($ds,$depth)
-		{
+	method dump ( $ds, $depth = 0 ) {
 		my Str $str;
-		given $ds.WHAT
-			{
-			# be very careful here. Check more derived types first.
-			when Match   { $str ~= self.Match($ds,$depth) }
-			when Hash    { $str ~= self.Hash($ds,$depth)  }
-			when Array   { $str ~= self.Array($ds,$depth) }
-			when Map     { $str ~= self.Map($ds,$depth) }
-			when List    { $str ~= self.List($ds,$depth) }
-			when Pair    { $str ~= self.Pair($ds,$depth)  }
-			when Str     { $str ~= $ds.perl }
-			when Numeric { $str ~= ~$ds }
-			when Nil     { $str ~= q{Nil} }
-			when Any     { $str ~= q{Any} }
-			}
-		return self.indent-string($str,$depth);
-		}
 
-	method pp($ds)
-		{
-		return self._pp($ds,0);
+		if $ds.can: 'PrettyDump' {
+			$str ~= $ds.PrettyDump: self;
+			}
+		else {
+			given $ds.WHAT {
+				# be very careful here. Check more derived types first.
+				when Match   { $str ~= self.Match: $ds, $depth }
+				when Hash    { $str ~= self.Hash:  $ds, $depth }
+				when Array   { $str ~= self.Array: $ds, $depth }
+				when Map     { $str ~= self.Map:   $ds, $depth }
+				when List    { $str ~= self.List:  $ds, $depth }
+				when Pair    { $str ~= self.Pair:  $ds, $depth }
+				when Str     { $str ~= $ds.perl }
+				when Numeric { $str ~= $ds.Str }
+				when Nil     { $str ~= q{Nil} }
+				when Any     { $str ~= q{Any} }
+				}
+			}
+
+		return self.indent-string: $str, $depth;
 		}
 	}
