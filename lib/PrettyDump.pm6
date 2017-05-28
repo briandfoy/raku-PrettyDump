@@ -134,7 +134,7 @@ class PrettyDump {
 				$str ~= '!' unless $ds.value;
 				$str ~= $ds.key
 				}
-			when "NQPMu" {
+			when "NQPMu" { # I don't think I should ever see this, but I do
 				$str ~= "{$ds.key}(Mu)";
 				}
 			default {
