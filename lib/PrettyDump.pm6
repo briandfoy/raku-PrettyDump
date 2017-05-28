@@ -203,7 +203,7 @@ class PrettyDump {
 	method Match ( $ds, $depth ) {
 		my $str = Q/Match.new(/;
 		my $hash = {
-			ast  => $ds.made,
+			made => $ds.made,
 			to   => $ds.to,
 			from => $ds.from,
 			orig => $ds.orig,
