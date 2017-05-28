@@ -129,28 +129,20 @@ class PrettyDumper {
 		return $str;
 		}
 
-	method Hash($ds,$depth)
-		{
-		my $str = '${';
-		$str ~= self._structure($ds,$depth);
-		$str ~= '}';
-		return $str;
+	method Hash ($ds,$depth) {
+		self.balanced:  '${', '}', $ds, $depth;
 		}
 
-	method Array($ds,$depth)
-		{
-		my $str = '$[';
-		$str ~= self._structure($ds,$depth);
-		$str ~= ']';
-		return $str;
+	method Array ( $ds, $depth ) {
+		self.balanced:  '$[', ']', $ds, $depth;
 		}
 
-	method List($ds,$depth)
-		{
-		my $str = '$(';
-		$str ~= self._structure($ds,$depth);
-		$str ~= ')';
-		return $str;
+	method List ( $ds, $depth ) {
+		self.balanced:  '$(', ')', $ds, $depth;
+		}
+
+	method balanced ( $start, $end, $ds, $depth ) {
+		return $start ~ self._structure( $ds, $depth ) ~ $end;
 		}
 
 	method _structure($ds,$depth)
