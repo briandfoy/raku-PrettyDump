@@ -52,6 +52,37 @@ So far, this module handles these types internally:
 
 =item * Match
 
+=head2 Custom dump methods
+
+If you define a C<.PrettyDump> method in your class, C<.dump> will call
+that when it encounters an object in that class. The first argument to
+C<.PrettyDump> is the dumper object, so you have access to some things
+in that class:
+
+	class Butterfly {
+		has $.genus;
+		has $.species;
+
+		method PrettyDump ( PrettyDump $pretty, Int $depth = 0 ) {
+			"_{$.genus} {$.species}_";
+			}
+		}
+
+The second argument is the level of indentation so far. If you want to
+dump other objects that your object contains, you should call C<.dump>
+again and pass it the value of C<$depth+1> as it's second argument:
+
+	class Butterfly {
+		has $.genus;
+		has $.species;
+		has $.some-other-object;
+
+		method PrettyDump ( PrettyDump $pretty, Int $depth = 0 ) {
+			"_{$.genus} {$.species}_" ~
+			$pretty.dump: $some-other-object, $depth + 1;
+			}
+		}
+
 =head2 Configuration
 
 You can set some tidy-like settings to control how C<.dump> will
