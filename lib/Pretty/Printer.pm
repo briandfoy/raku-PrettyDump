@@ -4,7 +4,7 @@
 
 PrettyDump - represent a Perl 6 data structure in a human readable way
 
-=head1 Synopsis
+=head1 SYNOPSIS
 
     use PrettyDump;
 
@@ -15,47 +15,76 @@ PrettyDump - represent a Perl 6 data structure in a human readable way
     	);
     say $pretty.dump: $ds; # '{:a(1)}'
 
-=head1 Documentation
+=head1 DESCRIPTION
 
-Print your data structures with a bit more space than your average .gist or .perl output. Also (with any luck) lets you see the hidden trailing commas that hide at the end of the .gist output.
+This module creates nicely formatted representations of your data
+structure for your viewing pleasure. It does not create valid Perl 6
+code and is not a serialization tool.
 
-The C<pp> function/method will B<always> attempt to return a string, so please dn't be surprised when passing in the C<Nil> object and C<'(Nil)'> return the same string. It's intended purely for debugging purposes, not serialization. If you require that types remain intact, then you're looking at the wrong module.
+When C<.dump> encounters an object in your data structure, it first
+checks for a C<.PrettyDump> method. It that exists, it uses it to
+stringify that object. Otherwise, C<.dump> looks for internal methods.
+So far, this module handles these types internally:
 
-The various settings work like this:
+=item * List
 
-=over 1
+=item * Array
+
+=item * Pair
+
+=item * Map
+
+=item * Hash
+
+=item * Match
+
+=head2 Configuration
+
+You can set some tidy-like settings to control how C<.dump> will
+present the data stucture:
+
+=item indent
+
+The default is a tab.
 
 =item intra-group-spacing
 
-Defines the spacing inserted inside (empty) C<${}> and C<$[]> constructs.
-
-=cut
+The spacing inserted inside (empty) C<${}> and C<$[]> constructs.
+The default is the empty string.
 
 =item pre-item-spacing
 
-The spacing inserted just after the opening brace or bracket of non-empty C<${}> and C<$[]> constructs.
-
-=cut
+The spacing inserted just after the opening brace or bracket of
+non-empty C<${}> and C<$[]> constructs. The default is a newline.
 
 =item post-item-spacing
 
-The spacing inserted just before the close brace or bracket of non-empty C<${}> and C<$[]> constructs.
-
-=cut
+The spacing inserted just before the close brace or bracket of
+non-empty C<${}> and C<$[]> constructs. The default is a newline.
 
 =item pre-separator-spacing
 
-The spacing inserted just before the comma separator of non-empty C<${}> and C<$[]> constructs.
-
-=cut
+The spacing inserted just before the comma separator of non-empty
+C<${}> and C<$[]> constructs. The default is the empty string.
 
 =item post-separator-spacing
 
-The spacing inserted just after the comma separator of non-empty C<${}> and C<$[]> constructs.
+The spacing inserted just after the comma separator of non-empty
+C<${}> and C<$[]> constructs.
 
-=cut
+=head1 AUTHOR
 
-=back
+brian d foy, C<< <bdfoy@cpan.org> >>.
+
+This module started as L<Pretty::Printer> from Jeff Goff,
+
+=head1 COPYRIGHT
+
+=head1 LICENSE
+
+This module is available under the Artistic License 2.0. A copy of
+this license should have come with this distribution in the LICENSE
+file.
 
 =end pod
 
