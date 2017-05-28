@@ -138,13 +138,13 @@ class PrettyDump {
 	put "in Pair, WHAT is $what";
 	put "\$what is {$what.^name}";
 		my $str = ':';
-		given $what {
+		given $ds.value.^name {
 			when "Bool" {
 				$str ~= '!' unless $ds.value;
 				$str ~= $ds.key
 				}
 			when "NQPMu" {
-				$str ~= "(Mu)";
+				$str ~= "{$ds.key}(Mu)";
 				}
 			default {
 				$str ~= $ds.key;
