@@ -8,6 +8,7 @@ When you want to look at your Perl 6 data structure, you probably want
 something nicer than `.perl` or `.gist`.
 
 
+
 ## Installation
 
 Install it with [zef](https://github.com/ugexe/zef), which comes with
@@ -15,7 +16,7 @@ the latest [Rakudo Star](http://rakudo.org/how-to-get-rakudo/):
 
 	zef install PrettyDump
 
-You can also checkout the [latest sources](https://github.com/briandfoy/perl6-PrettyDump), then install from that directory:
+You can also checkout the [latest sources](https://github.com/briandfoy/perl6-PrettyDump) then install from that directory:
 
 	zef install .
 
