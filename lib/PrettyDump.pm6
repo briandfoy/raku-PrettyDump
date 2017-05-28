@@ -6,15 +6,28 @@ PrettyDump - represent a Perl 6 data structure in a human readable way
 
 =head1 SYNOPSIS
 
+Use is in the OO fashion:
+
     use PrettyDump;
+    my $pretty = PrettyDump.new:
+    	after-opening-brace => True
+    	;
+
+    my $perl = { a => 1 };
+    say $pretty.dump: $perl; # '{:a(1)}'
+
+Or, use its subroutine:
+
+	use PrettyDump qw(pretty-dump);
 
     my $ds = { a => 1 };
-    my $pretty = PrettyDump.new:
 
-    my $pretty = PrettyDump.new(
-    	after-opening-brace => True
-    	);
-    say $pretty.dump: $ds; # '{:a(1)}'
+	say pretty-dump( $ds );
+
+	# setting are named arguments
+	say pretty-dump( $ds
+		:indent("\t")
+		);
 
 =head1 DESCRIPTION
 
