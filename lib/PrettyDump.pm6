@@ -164,21 +164,18 @@ class PrettyDump {
 		}
 
 	method !structure ( $ds, $depth ) {
-		my $str;
 		if @($ds).elems {
-			$str ~= $.pre-item-spacing;
-			$str ~= join(
-				$.pre-separator-spacing ~
-				',' ~
-				$.post-separator-spacing,
-				map { self.dump: $_, $depth+1 }, sort @($ds)
-				);
-			$str ~= $.post-item-spacing;
+			my $separator = [~] $.pre-separator-spacing, ',', $.post-separator-spacing;
+			[~]
+				$.pre-item-spacing,
+				join( $separator,
+					map { self.dump: $_, $depth+1 }, sort @($ds)
+					),
+				$.post-item-spacing;
 			}
 		else {
-			$str ~= $.intra-group-spacing;
+			$.intra-group-spacing;
 			}
-		return $str;
 		}
 
 	method Map ( $ds, $depth ) {
