@@ -122,7 +122,7 @@ class PrettyDump {
 
 	has Str $.indent                 = "\t";
 
-	method indent-string ( $str, $depth ) {
+	method !indent-string ( $str, $depth ) {
 		return $str unless $.indent ne '';
 		return $str.subst: /^^/, $.indent x $depth, :g;
 		}
@@ -148,22 +148,22 @@ class PrettyDump {
 		}
 
 	method Hash ( $ds, $depth ) {
-		self.balanced:  '${', '}', $ds, $depth;
+		self!balanced:  '${', '}', $ds, $depth;
 		}
 
 	method Array ( $ds, $depth ) {
-		self.balanced:  '$[', ']', $ds, $depth;
+		self!balanced:  '$[', ']', $ds, $depth;
 		}
 
 	method List ( $ds, $depth ) {
-		self.balanced:  '$(', ')', $ds, $depth;
+		self!balanced:  '$(', ')', $ds, $depth;
 		}
 
-	method balanced ( $start, $end, $ds, $depth ) {
-		return [~] $start, self.structure( $ds, $depth ), $end;
+	method !balanced ( $start, $end, $ds, $depth ) {
+		return [~] $start, self!structure( $ds, $depth ), $end;
 		}
 
-	method _structure ( $ds, $depth ) {
+	method !structure ( $ds, $depth ) {
 		my $str;
 		if @($ds).elems {
 			$str ~= $.pre-item-spacing;
@@ -200,11 +200,11 @@ class PrettyDump {
 			list => $ds.list,
 			pos  => $ds.pos,
 			};
-		$str ~= self._structure: $hash, $depth;
+		$str ~= self!structure: $hash, $depth;
 		$str ~= ')';
 		}
 
-	method Numeric ( $ds, $depth ) { $ds.Str }
+	method !Numeric ( $ds, $depth ) { $ds.Str }
 
 	method Str   ( $ds, $depth ) { $ds.perl }
 	method Nil   ( $ds, $depth ) { q/Nil/ }
@@ -219,7 +219,7 @@ class PrettyDump {
 			$str ~= $ds.PrettyDump: self;
 			}
 		elsif $ds ~~ Numeric {
-			$str ~= self.Numeric: $ds, $depth;
+			$str ~= self!Numeric: $ds, $depth;
 			}
 		elsif self.can: $ds.^name {
 			my $what = $ds.^name;
@@ -229,7 +229,7 @@ class PrettyDump {
 			die "Could not handle " ~ $ds.perl;
 			}
 
-		return self.indent-string: $str, $depth;
+		return self!indent-string: $str, $depth;
 		}
 
 	sub pretty-dump ( $ds,
