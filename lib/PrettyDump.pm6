@@ -249,10 +249,10 @@ class PrettyDump {
 		}
 
 
-	method Str   ( $ds, Int $depth --> Str ) { $ds.perl }
-	method Nil   ( $ds, Int $depth --> Str ) { q/Nil/ }
-	method Any   ( $ds, Int $depth --> Str ) { q/Any/ }
-	method Mu    ( $ds, Int $depth --> Str ) { q/Mu/  }
+	method Str   ( Str $ds, Int $depth --> Str ) { $ds.perl }
+	method Nil   ( Nil $ds, Int $depth --> Str ) { q/Nil/ }
+	method Any   ( Any $ds, Int $depth --> Str ) { q/Any/ }
+	method Mu    ( Mu  $ds, Int $depth --> Str ) { q/Mu/  }
 	method NQPMu ( $ds, Int $depth --> Str ) { q/Mu/  }
 
 	method dump ( $ds, Int $depth = 0 --> Str ) {
