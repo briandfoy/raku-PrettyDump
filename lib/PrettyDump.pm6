@@ -153,12 +153,12 @@ class PrettyDump {
 
 	has Str $.indent                 = "\t";
 
-	method !indent-string ( $str, $depth ) {
+	method !indent-string ( $str, $depth --> Str ) {
 		return $str unless $.indent ne '';
 		return $str.subst: /^^/, $.indent x $depth, :g;
 		}
 
-	method Pair ( $ds, $depth ) {
+	method Pair ( $ds, $depth --> Str ) {
 		my $str = ':';
 		given $ds.value.^name {
 			when "Bool" {
@@ -179,19 +179,19 @@ class PrettyDump {
 		return $str;
 		}
 
-	method Hash ( $ds, $depth ) {
+	method Hash ( $ds, $depth --> Str ) {
 		self!balanced:  '${', '}', $ds, $depth;
 		}
 
-	method Array ( $ds, $depth ) {
+	method Array ( $ds, $depth --> Str ) {
 		self!balanced:  '$[', ']', $ds, $depth;
 		}
 
-	method List ( $ds, $depth ) {
+	method List ( $ds, $depth --> Str ) {
 		self!balanced:  '$(', ')', $ds, $depth;
 		}
 
-	method Range ( $ds, $depth ) {
+	method Range ( $ds, $depth --> Str ) {
 		[~]
 			$ds.min,
 			( $ds.excludes-min ?? '^' !! '' ),
@@ -200,11 +200,11 @@ class PrettyDump {
 			( $ds.infinite ?? '*' !! $ds.max ),
 		}
 
-	method !balanced ( $start, $end, $ds, $depth ) {
+	method !balanced ( $start, $end, $ds, $depth --> Str ) {
 		return [~] $start, self!structure( $ds, $depth ), $end;
 		}
 
-	method !structure ( $ds, $depth ) {
+	method !structure ( $ds, $depth --> Str ) {
 		if @($ds).elems {
 			my $separator = [~] $.pre-separator-spacing, ',', $.post-separator-spacing;
 			[~]
@@ -219,11 +219,11 @@ class PrettyDump {
 			}
 		}
 
-	method Map ( $ds, $depth ) {
+	method Map ( $ds, $depth --> Str ) {
 		[~] q/Map.new(/, self!structure( $ds, $depth ), ')';
 		}
 
-	method Match ( $ds, $depth ) {
+	method Match ( $ds, $depth --> Str ) {
 		my $str = Q/Match.new(/;
 		my $hash = {
 			made => $ds.made,
@@ -238,15 +238,15 @@ class PrettyDump {
 		$str ~= ')';
 		}
 
-	method !Numeric ( $ds, $depth ) { $ds.Str }
+	method !Numeric ( $ds, $depth --> Str ) { $ds.Str }
 
-	method Str   ( $ds, $depth ) { $ds.perl }
-	method Nil   ( $ds, $depth ) { q/Nil/ }
-	method Any   ( $ds, $depth ) { q/Any/ }
-	method Mu    ( $ds, $depth ) { q/Mu/  }
-	method NQPMu ( $ds, $depth ) { q/Mu/  }
+	method Str   ( $ds, $depth --> Str ) { $ds.perl }
+	method Nil   ( $ds, $depth --> Str ) { q/Nil/ }
+	method Any   ( $ds, $depth --> Str ) { q/Any/ }
+	method Mu    ( $ds, $depth --> Str ) { q/Mu/  }
+	method NQPMu ( $ds, $depth --> Str ) { q/Mu/  }
 
-	method dump ( $ds, $depth = 0 ) {
+	method dump ( $ds, $depth = 0 --> Str ) {
 		my Str $str;
 
 		if $ds.can: 'PrettyDump' {
@@ -273,7 +273,7 @@ class PrettyDump {
 		:$intra-group-spacing    = '',
 		:$post-separator-spacing = "\n",
 		:$indent                 = "\t",
-		) is export {
+		--> Str ) is export {
 		my $pretty = PrettyDump.new:
 			:indent\                 ($indent),
 			:pre-item-spacing\       ($pre-item-spacing),
