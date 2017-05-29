@@ -153,12 +153,12 @@ class PrettyDump {
 
 	has Str $.indent                 = "\t";
 
-	method !indent-string ( $str, $depth --> Str ) {
+	method !indent-string ( Str $str, Int $depth --> Str ) {
 		return $str unless $.indent ne '';
 		return $str.subst: /^^/, $.indent x $depth, :g;
 		}
 
-	method Pair ( $ds, $depth --> Str ) {
+	method Pair ( Pair $ds, Int $depth --> Str ) {
 		my $str = ':';
 		given $ds.value.^name {
 			when "Bool" {
@@ -179,19 +179,19 @@ class PrettyDump {
 		return $str;
 		}
 
-	method Hash ( $ds, $depth --> Str ) {
+	method Hash ( Hash $ds, Int $depth --> Str ) {
 		self!balanced:  '${', '}', $ds, $depth;
 		}
 
-	method Array ( $ds, $depth --> Str ) {
+	method Array ( Array $ds, Int $depth --> Str ) {
 		self!balanced:  '$[', ']', $ds, $depth;
 		}
 
-	method List ( $ds, $depth --> Str ) {
+	method List ( List $ds, Int $depth --> Str ) {
 		self!balanced:  '$(', ')', $ds, $depth;
 		}
 
-	method Range ( $ds, $depth --> Str ) {
+	method Range ( Range $ds, Int $depth --> Str ) {
 		[~]
 			$ds.min,
 			( $ds.excludes-min ?? '^' !! '' ),
@@ -200,11 +200,11 @@ class PrettyDump {
 			( $ds.infinite ?? '*' !! $ds.max ),
 		}
 
-	method !balanced ( $start, $end, $ds, $depth --> Str ) {
+	method !balanced ( Str $start, Str $end, $ds, Int $depth --> Str ) {
 		return [~] $start, self!structure( $ds, $depth ), $end;
 		}
 
-	method !structure ( $ds, $depth --> Str ) {
+	method !structure ( $ds, Int $depth --> Str ) {
 		if @($ds).elems {
 			my $separator = [~] $.pre-separator-spacing, ',', $.post-separator-spacing;
 			[~]
@@ -219,11 +219,11 @@ class PrettyDump {
 			}
 		}
 
-	method Map ( $ds, $depth --> Str ) {
+	method Map ( Map $ds, Int $depth --> Str ) {
 		[~] q/Map.new(/, self!structure( $ds, $depth ), ')';
 		}
 
-	method Match ( $ds, $depth --> Str ) {
+	method Match ( Match $ds, Int $depth --> Str ) {
 		my $str = Q/Match.new(/;
 		my $hash = {
 			made => $ds.made,
@@ -238,15 +238,15 @@ class PrettyDump {
 		$str ~= ')';
 		}
 
-	method !Numeric ( $ds, $depth --> Str ) { $ds.Str }
+	method !Numeric ( $ds, Int $depth --> Str ) { $ds.Str }
 
-	method Str   ( $ds, $depth --> Str ) { $ds.perl }
-	method Nil   ( $ds, $depth --> Str ) { q/Nil/ }
-	method Any   ( $ds, $depth --> Str ) { q/Any/ }
-	method Mu    ( $ds, $depth --> Str ) { q/Mu/  }
-	method NQPMu ( $ds, $depth --> Str ) { q/Mu/  }
+	method Str   ( $ds, Int $depth --> Str ) { $ds.perl }
+	method Nil   ( $ds, Int $depth --> Str ) { q/Nil/ }
+	method Any   ( $ds, Int $depth --> Str ) { q/Any/ }
+	method Mu    ( $ds, Int $depth --> Str ) { q/Mu/  }
+	method NQPMu ( $ds, Int $depth --> Str ) { q/Mu/  }
 
-	method dump ( $ds, $depth = 0 --> Str ) {
+	method dump ( $ds, Int $depth = 0 --> Str ) {
 		my Str $str;
 
 		if $ds.can: 'PrettyDump' {
