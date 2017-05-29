@@ -191,6 +191,15 @@ class PrettyDump {
 		self!balanced:  '$(', ')', $ds, $depth;
 		}
 
+	method Range ( $ds, $depth ) {
+		[~]
+			$ds.min,
+			( $ds.excludes-min ?? '^' !! '' ),
+			'..',
+			( $ds.excludes-max ?? '^' !! '' ),
+			( $ds.infinite ?? '*' !! $ds.max ),
+		}
+
 	method !balanced ( $start, $end, $ds, $depth ) {
 		return [~] $start, self!structure( $ds, $depth ), $end;
 		}
