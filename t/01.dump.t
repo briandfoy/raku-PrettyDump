@@ -20,7 +20,6 @@ subtest {
 	is $p.dump(True),     q<True>,     q<True works.>;
 	is $p.dump(0),        q<0>,        q<0 works.>;
 	is $p.dump(1),        q<1>,        q<1 works.>;
-	is $p.dump(1.234),    q<1.234>,    q<1.234 works.>;
 	is $p.dump(1.234-2i), q<1.234-2i>, q<1.234-2i works.>;
 	is $p.dump(''),       q<"">,       q<Empty strings quotify.>;
 	is $p.dump(""),       q<"">,       q<Even interpolated strings.>;

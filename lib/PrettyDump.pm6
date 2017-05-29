@@ -238,7 +238,16 @@ class PrettyDump {
 		$str ~= ')';
 		}
 
-	method !Numeric ( $ds, Int $depth --> Str ) { $ds.Str }
+	method !Numeric ( Numeric $ds, Int $depth --> Str ) {
+		do { given $ds {
+			when FatRat { [~] '<', $ds.numerator, '/' , $ds.denominator, '>' }
+			when Rat    { [~] '<', $ds.numerator, '/' , $ds.denominator, '>' }
+			default {
+				$ds.Str
+				}
+			}}
+		}
+
 
 	method Str   ( $ds, Int $depth --> Str ) { $ds.perl }
 	method Nil   ( $ds, Int $depth --> Str ) { q/Nil/ }
