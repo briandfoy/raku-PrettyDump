@@ -256,21 +256,24 @@ class PrettyDump {
 	method NQPMu ( $ds, Int $depth --> Str ) { q/Mu/  }
 
 	method dump ( $ds, Int $depth = 0 --> Str ) {
-		my Str $str;
-
-		if $ds.can: 'PrettyDump' {
-			$str ~= $ds.PrettyDump: self;
-			}
-		elsif $ds ~~ Numeric {
-			$str ~= self!Numeric: $ds, $depth;
-			}
-		elsif self.can: $ds.^name {
-			my $what = $ds.^name;
-			$str ~= self."$what"( $ds, $depth );
-			}
-		else {
-			die "Could not handle " ~ $ds.perl;
-			}
+		my Str $str = do {
+			if $ds.can: 'PrettyDump' {
+				$str ~= $ds.PrettyDump: self;
+				}
+			elsif $ds ~~ Numeric {
+				$str ~= self!Numeric: $ds, $depth;
+				}
+			elsif self.can: $ds.^name {
+				my $what = $ds.^name;
+				$str ~= self."$what"( $ds, $depth );
+				}
+			elsif $ds.can: 'Str' {
+				die "Could not handle " ~ $ds.Str;
+				}
+			else {
+				"(Unhandled {$ds.^name})"
+				}
+			};
 
 		return self!indent-string: $str, $depth;
 		}
