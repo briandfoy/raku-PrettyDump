@@ -268,7 +268,7 @@ class PrettyDump {
 				$str ~= self."$what"( $ds, $depth );
 				}
 			elsif $ds.can: 'Str' {
-				die "Could not handle " ~ $ds.Str;
+				$ds.Str;
 				}
 			else {
 				"(Unhandled {$ds.^name})"
