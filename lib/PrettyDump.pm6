@@ -261,18 +261,18 @@ class PrettyDump {
 		my Str $str = do {
 			# The object might have its own method to dump its structure
 			if $ds.can: 'PrettyDump' {
-				$str ~= $ds.PrettyDump: self;
+				$ds.PrettyDump: self;
 				}
 			# If it's any sort of Numeric, we'll handle it and dispatch
 			# further
 			elsif $ds ~~ Numeric {
-				$str ~= self!Numeric: $ds, $depth;
+				self!Numeric: $ds, $depth;
 				}
 			# If we have a method name that matches the class, we'll
 			# use that.
 			elsif self.can: $ds.^name {
 				my $what = $ds.^name;
-				$str ~= self."$what"( $ds, $depth );
+				self."$what"( $ds, $depth );
 				}
 			# If the class inherits from something that we know
 			# about, use the most specific one that we know about
