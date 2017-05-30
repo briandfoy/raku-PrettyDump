@@ -272,6 +272,11 @@ class PrettyDump {
 				my $what = $ds.^name;
 				$str ~= self."$what"( $ds, $depth );
 				}
+			# What if the class inherits from something that we know
+			# about?
+			elsif 0 {
+				...
+				}
 			# If we're this far and the object has a .Str method,
 			# we'll use that:
 			elsif $ds.can: 'Str' {
