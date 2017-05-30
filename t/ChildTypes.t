@@ -31,10 +31,10 @@ subtest {
 
 	my $string = $p.dump: $object;
 	isa-ok $string, Str, 'Got Str back';
-	my $expected = Q/${
+	my $expected = qq/{$tiny-class-str}.new(
 	:abc("123"),
 	:xyz("def")
-}/;
+)/;
 
 	is $string, $expected, 'Dumping $object returns expected string';
 	}, 'Object that inherits from Hash';

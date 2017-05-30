@@ -179,16 +179,16 @@ class PrettyDump {
 		return $str;
 		}
 
-	method Hash ( Hash $ds, Int $depth --> Str ) {
-		self!balanced:  '${', '}', $ds, $depth;
+	method Hash ( Hash $ds, Int $depth, Str $start = '${', Str $end = '}' --> Str ) {
+		self!balanced:  $start, $end, $ds, $depth;
 		}
 
-	method Array ( Array $ds, Int $depth --> Str ) {
-		self!balanced:  '$[', ']', $ds, $depth;
+	method Array ( Array $ds, Int $depth, Str $start = '$[', Str $end = ']' --> Str ) {
+		self!balanced:  $start, $end, $ds, $depth;
 		}
 
-	method List ( List $ds, Int $depth --> Str ) {
-		self!balanced:  '$(', ')', $ds, $depth;
+	method List ( List $ds, Int $depth, Str $start = '$(', Str $end = ')' --> Str ) {
+		self!balanced:  $start, $end, $ds, $depth;
 		}
 
 	method Range ( Range $ds, Int $depth --> Str ) {
@@ -277,11 +277,11 @@ class PrettyDump {
 			# If the class inherits from something that we know
 			# about, use the most specific one that we know about
 			elsif $ds.^parents.grep( { self.can: $_.^name } ).elems > 0 {
-				my $str;
+				my Str $str = '';
 				for $ds.^parents -> $type {
 					my $what = $type.^name;
-					next unless self.can: $what;
-					$str ~= self."$what"( $ds, $depth );
+					next unless self.can( $what );
+					$str ~= self."$what"( $ds, $depth, "{$ds.^name}.new(", ')' );
 					last;
 					}
 				$str;
