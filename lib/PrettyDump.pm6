@@ -269,15 +269,20 @@ class PrettyDump {
 				$str ~= self!Numeric: $ds, $depth;
 				}
 			# If we have a method name that matches the class, we'll
-			# use that
+			# use that.
 			elsif self.can: $ds.^name {
 				my $what = $ds.^name;
 				$str ~= self."$what"( $ds, $depth );
 				}
-			# What if the class inherits from something that we know
-			# about?
-			elsif 0 {
-				...
+			# If the class inherits from something that we know
+			# about, use the most specific one that we know about
+			elsif $ds.^parents.grep( { self.can: $_ } ).elems > 0 {
+				for $ds.^parents -> $type {
+					my $what = $type.^name;
+					next unless self.can: $what;
+					self."$what"( $ds, $depth );
+					last;
+					}
 				}
 			# If we're this far and the object has a .Str method,
 			# we'll use that:
