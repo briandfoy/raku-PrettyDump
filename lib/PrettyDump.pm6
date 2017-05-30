@@ -277,12 +277,14 @@ class PrettyDump {
 			# If the class inherits from something that we know
 			# about, use the most specific one that we know about
 			elsif $ds.^parents.grep( { self.can: $_.^name } ).elems > 0 {
+				my $str;
 				for $ds.^parents -> $type {
 					my $what = $type.^name;
 					next unless self.can: $what;
-					self."$what"( $ds, $depth );
+					$str ~= self."$what"( $ds, $depth );
 					last;
 					}
+				$str;
 				}
 			# If we're this far and the object has a .Str method,
 			# we'll use that:
