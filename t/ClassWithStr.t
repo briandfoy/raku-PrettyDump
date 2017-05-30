@@ -34,7 +34,7 @@ subtest {
 
 	my $string = $p.dump: $object;
 	isa-ok $string, Str, 'Got Str back';
-	my $expected = qq/foo is ｢137｣/;
+	my $expected = qq/($tiny-class-str): foo is ｢137｣/;
 
 	is $string, $expected, 'Dumping $object returns expected string';
 	}, 'Object with .Str';
