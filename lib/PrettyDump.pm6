@@ -257,19 +257,27 @@ class PrettyDump {
 
 	method dump ( $ds, Int $depth = 0 --> Str ) {
 		my Str $str = do {
+			# The object might have its own method to dump its structure
 			if $ds.can: 'PrettyDump' {
 				$str ~= $ds.PrettyDump: self;
 				}
+			# If it's any sort of Numeric, we'll handle it and dispatch
+			# further
 			elsif $ds ~~ Numeric {
 				$str ~= self!Numeric: $ds, $depth;
 				}
+			# If we have a method name that matches the class, we'll
+			# use that
 			elsif self.can: $ds.^name {
 				my $what = $ds.^name;
 				$str ~= self."$what"( $ds, $depth );
 				}
+			# If we're this far and the object has a .Str method,
+			# we'll use that:
 			elsif $ds.can: 'Str' {
 				"({$ds.^name}): " ~ $ds.Str;
 				}
+			# Finally, we'll put a placeholder method there
 			else {
 				"(Unhandled {$ds.^name})"
 				}
