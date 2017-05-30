@@ -220,11 +220,13 @@ class PrettyDump {
 		}
 
 	method Map ( Map $ds, Int $depth --> Str ) {
-		[~] q/Map.new(/, self!structure( $ds, $depth ), ')';
+		my $type = $ds.^name;
+		[~] qq/{$type}.new(/, self!structure( $ds, $depth ), ')';
 		}
 
 	method Match ( Match $ds, Int $depth --> Str ) {
-		my $str = Q/Match.new(/;
+		my $type = $ds.^name;
+		my $str = qq/{$type}.new(/;
 		my $hash = {
 			made => $ds.made,
 			to   => $ds.to,
