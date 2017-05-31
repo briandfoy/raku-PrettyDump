@@ -257,10 +257,40 @@ class PrettyDump {
 	method Mu    ( Mu  $ds, Int $depth --> Str ) { q/Mu/  }
 	method NQPMu ( $ds, Int $depth --> Str ) { q/Mu/  }
 
+	has %!handlers = Hash.new();
+
+	method add-handler ( Str $type-name, Callable &code ) {
+		if self.handles: $type-name {
+			# fail?
+			# replace and warn?
+			...
+			}
+
+		# check callable signature ( PrettyDump $pretty, $ds, Int $depth --> Str)
+
+		%!handlers{$type-name} = &code;
+		}
+
+	method handles ( Str $type-name --> Bool ) {
+		%!handlers<$type-name>:exists
+		}
+
+	method !handle ( $ds, Int $depth = 0 --> Str ) {
+		# fail if it doesn't exist
+		my $handler = %!handlers{$ds.^name};
+
+		$handler.( self, $ds, $depth )
+		}
+
 	method dump ( $ds, Int $depth = 0 --> Str ) {
 		my Str $str = do {
+			# If the PrettyDump object has a user-defined handler
+			# for this type, prefer that one
+			if self.handles: $ds.^name {
+				self!handle: $ds, $depth;
+				}
 			# The object might have its own method to dump its structure
-			if $ds.can: 'PrettyDump' {
+			elsif $ds.can: 'PrettyDump' {
 				$ds.PrettyDump: self;
 				}
 			# If it's any sort of Numeric, we'll handle it and dispatch
@@ -284,11 +314,6 @@ class PrettyDump {
 					$str ~= self."$what"( $ds, $depth, "{$ds.^name}.new(", ')' );
 					last;
 					}
-			# If the PrettyDump object has a user-defined handler
-			# for this type, prefer that one
-			if self.handles: $ds.^name {
-				self!handle: $ds, $depth;
-				}
 				$str;
 				}
 			# If we're this far and the object has a .Str method,
