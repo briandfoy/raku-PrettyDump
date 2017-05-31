@@ -284,6 +284,11 @@ class PrettyDump {
 					$str ~= self."$what"( $ds, $depth, "{$ds.^name}.new(", ')' );
 					last;
 					}
+			# If the PrettyDump object has a user-defined handler
+			# for this type, prefer that one
+			if self.handles: $ds.^name {
+				self!handle: $ds, $depth;
+				}
 				$str;
 				}
 			# If we're this far and the object has a .Str method,
