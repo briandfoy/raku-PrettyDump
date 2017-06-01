@@ -255,7 +255,7 @@ class PrettyDump {
 	method Nil   ( Nil $ds, Int $depth --> Str ) { q/Nil/ }
 	method Any   ( Any $ds, Int $depth --> Str ) { q/Any/ }
 	method Mu    ( Mu  $ds, Int $depth --> Str ) { q/Mu/  }
-	method NQPMu ( $ds, Int $depth --> Str ) { q/Mu/  }
+	method NQPMu (     $ds, Int $depth --> Str ) { q/Mu/  }
 
 	has %!handlers = Hash.new();
 
@@ -278,7 +278,6 @@ class PrettyDump {
 	method !handle ( $ds, Int $depth = 0 --> Str ) {
 		# fail if it doesn't exist
 		my $handler = %!handlers{$ds.^name};
-
 		$handler.( self, $ds, $depth )
 		}
 
