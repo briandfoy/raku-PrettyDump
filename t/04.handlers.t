@@ -11,6 +11,7 @@ subtest {
 	can-ok $class, 'add-handler' or bail-out "{package-name} cannot .add-handler";
 	can-ok $class, 'handles' or bail-out "{package-name} cannot .handles";
 	can-ok $class, 'dump' or bail-out "{package-name} cannot .dump";
+	can-ok $class, 'remove-handler' or bail-out "{package-name} cannot .remove-handler";
 	}, "{package-name} setup";
 
 class TinyClass {
@@ -38,6 +39,9 @@ subtest {
 	is $p.handles( $tiny-class-str ), True, "Now basic object handles $tiny-class-str";
 	my $tiny-obj = $tiny-class.new: :foo(123);
 	is $p.dump( $tiny-obj ), 'Hello foo 123', 'Dump returns the expected string';
+
+	$p.remove-handler: $tiny-class-str;
+	is $p.handles( $tiny-class-str ), False, "Basic object no longer handles $tiny-class-str";
 	}, 'Try a handler with a good signature';
 
 subtest {
