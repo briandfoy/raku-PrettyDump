@@ -272,7 +272,7 @@ class PrettyDump {
 		}
 
 	method handles ( Str $type-name --> Bool ) {
-		%!handlers<$type-name>:exists
+		%!handlers{$type-name}:exists
 		}
 
 	method !handle ( $ds, Int $depth = 0 --> Str ) {
