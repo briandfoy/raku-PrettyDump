@@ -259,16 +259,15 @@ class PrettyDump {
 
 	has %!handlers = Hash.new();
 
-	method add-handler ( Str $type-name, Callable &code ) {
-		if self.handles: $type-name {
-			# fail?
-			# replace and warn?
-			...
+	method add-handler ( Str $type-name, Code $code ) {
+		# check callable signature ( PrettyDump $pretty, $ds, Int $depth --> Str)
+		my $sig = $code.signature;
+		my $needed-sig = :( PrettyDump $pretty, $ds, Int $depth = 0 --> Str);
+		unless $sig ~~ $needed-sig {
+			fail X::AdHoc.new: payload => "Signature should be {$needed-sig.gist}";
 			}
 
-		# check callable signature ( PrettyDump $pretty, $ds, Int $depth --> Str)
-
-		%!handlers{$type-name} = &code;
+		%!handlers{$type-name} = $code;
 		}
 
 	method handles ( Str $type-name --> Bool ) {
