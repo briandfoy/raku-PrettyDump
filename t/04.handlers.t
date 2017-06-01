@@ -28,7 +28,23 @@ subtest {
 	is $tiny-class.can( 'PrettyDump' ), False, "$tiny-class-str does not do .PrettyDump";
 	}, "$tiny-class-str setup";
 
-my $p = $class.new;
-is $p.handles( $tiny-class-str ), False, "Basic object does not handle $tiny-class-str";
+subtest {
+	my $p = $class.new;
+	is $p.handles( $tiny-class-str ), False, "Basic object does not handle $tiny-class-str";
+	my $sub = -> PrettyDump $p, $ds, Int $depth=0 --> Str {
+		'Hello foo ' ~ $ds.foo
+		};
+	$p.add-handler( $tiny-class-str, $sub );
+	is $p.handles( $tiny-class-str ), True, "Now basic object handles $tiny-class-str";
+	my $tiny-obj = $tiny-class.new: :foo(123);
+	is $p.dump( $tiny-obj ), 'Hello foo 123', 'Dump returns the expected string';
+	}, 'Try a handler with a good signature';
+
+subtest {
+	my $p = $class.new;
+	is $p.handles( $tiny-class-str ), False, "Basic object does not handle $tiny-class-str";
+	my $sub = -> { 'Hello foo ' };
+	dies-ok { $p.add-handler( $tiny-class-str, $sub ) }, "Bad signature dies";
+	}, 'Try a handler with a bad signature';
 
 done-testing();
