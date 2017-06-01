@@ -83,6 +83,26 @@ again and pass it the value of C<$depth+1> as it's second argument:
 			}
 		}
 
+=head2 Per-object dump handlers
+
+You can add custom handlers to your C<PrettyDump> object. Once added,
+the object will try to use a handler first. This means that you can
+override builtin methods.
+
+	$pretty = PrettyDump.new: ... ;
+	$pretty.add-handler: "SomeTypeNameStr", $code-thingy;
+
+The code signature for C<$code-thingy> must be:
+
+	(PrettyDump $pretty, $ds, Int $depth = 0 --> Str)
+
+Once you are done with the per-object handler, you can remove it:
+
+	$pretty.remove-handler: "SomeTypeNameStr";
+
+This allows you to temporarily override a builtin method. You might
+want to mute a particular object, for instance.
+
 =head2 Configuration
 
 You can set some tidy-like settings to control how C<.dump> will
@@ -255,12 +275,44 @@ class PrettyDump {
 	method Nil   ( Nil $ds, Int $depth --> Str ) { q/Nil/ }
 	method Any   ( Any $ds, Int $depth --> Str ) { q/Any/ }
 	method Mu    ( Mu  $ds, Int $depth --> Str ) { q/Mu/  }
-	method NQPMu ( $ds, Int $depth --> Str ) { q/Mu/  }
+	method NQPMu (     $ds, Int $depth --> Str ) { q/Mu/  }
+
+	has %!handlers = Hash.new();
+
+	method add-handler ( Str $type-name, Code $code ) {
+		# check callable signature ( PrettyDump $pretty, $ds, Int $depth --> Str)
+		my $sig = $code.signature;
+		my $needed-sig = :( PrettyDump $pretty, $ds, Int $depth = 0 --> Str);
+		unless $sig ~~ $needed-sig {
+			fail X::AdHoc.new: payload => "Signature should be {$needed-sig.gist}";
+			}
+
+		%!handlers{$type-name} = $code;
+		}
+
+	method remove-handler ( Str $type-name ) {
+		%!handlers{$type-name}:delete.so
+		}
+
+	method handles ( Str $type-name --> Bool ) {
+		%!handlers{$type-name}:exists
+		}
+
+	method !handle ( $ds, Int $depth = 0 --> Str ) {
+		# fail if it doesn't exist
+		my $handler = %!handlers{$ds.^name};
+		$handler.( self, $ds, $depth )
+		}
 
 	method dump ( $ds, Int $depth = 0 --> Str ) {
 		my Str $str = do {
+			# If the PrettyDump object has a user-defined handler
+			# for this type, prefer that one
+			if self.handles: $ds.^name {
+				self!handle: $ds, $depth;
+				}
 			# The object might have its own method to dump its structure
-			if $ds.can: 'PrettyDump' {
+			elsif $ds.can: 'PrettyDump' {
 				$ds.PrettyDump: self;
 				}
 			# If it's any sort of Numeric, we'll handle it and dispatch
