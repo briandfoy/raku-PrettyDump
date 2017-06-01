@@ -7,11 +7,11 @@ use ::(package-name);
 my $class = ::(package-name);
 
 subtest {
-	can-ok $class, 'new' or bail-out "{package-name} cannot .new";
-	can-ok $class, 'add-handler' or bail-out "{package-name} cannot .add-handler";
-	can-ok $class, 'handles' or bail-out "{package-name} cannot .handles";
-	can-ok $class, 'dump' or bail-out "{package-name} cannot .dump";
+	can-ok $class, 'new'            or bail-out "{package-name} cannot .new";
+	can-ok $class, 'add-handler'    or bail-out "{package-name} cannot .add-handler";
 	can-ok $class, 'remove-handler' or bail-out "{package-name} cannot .remove-handler";
+	can-ok $class, 'handles'        or bail-out "{package-name} cannot .handles";
+	can-ok $class, 'dump'           or bail-out "{package-name} cannot .dump";
 	}, "{package-name} setup";
 
 class TinyClass {
