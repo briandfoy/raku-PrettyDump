@@ -1,9 +1,9 @@
 {
 "name"        : "PrettyDump",
 "version"     : "1.0.1",
-"description" : "Pretty-printer for Perl6 data structures",
+"description" : "Pretty printer for Perl6 data structures",
 "provides"    : {
-	"Pretty::Printer" : "lib/PrettyDump.pm6"
+	"PrettyDump" : "lib/PrettyDump.pm6"
 	},
 "source-url"  : "https://github.com/briandfoy/perl6-PrettyDump"
 }
