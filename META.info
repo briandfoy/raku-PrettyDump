@@ -1,6 +1,6 @@
 {
 "name"        : "PrettyDump",
-"version"     : "1.0.1",
+"version"     : "1.0.2",
 "description" : "Pretty printer for Perl6 data structures",
 "provides"    : {
 	"PrettyDump" : "lib/PrettyDump.pm6"
