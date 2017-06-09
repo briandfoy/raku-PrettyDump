@@ -351,10 +351,9 @@ class PrettyDump {
 			# about, use the most specific one that we know about
 			elsif self.can: any( $ds.^parents.map: *.^name ) {
 				my Str $str = '';
-				for $ds.^parents -> $type {
-					my $what = $type.^name;
-					next unless self.can: $what;
-					$str ~= self."$what"( $ds, $depth, "{$ds.^name}.new(", ')' );
+				for $ds.^parents.map: *.^name -> $type {
+					next unless self.can: $type;
+					$str ~= self."$type"( $ds, $depth, "{$ds.^name}.new(", ')' );
 					last;
 					}
 				$str;
