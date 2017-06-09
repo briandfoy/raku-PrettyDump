@@ -349,7 +349,7 @@ class PrettyDump {
 				}
 			# If the class inherits from something that we know
 			# about, use the most specific one that we know about
-			elsif $ds.^parents.grep( { self.can: $_.^name } ).elems > 0 {
+			elsif self.can: any( $ds.^parents.map: *.^name ) {
 				my Str $str = '';
 				for $ds.^parents -> $type {
 					my $what = $type.^name;
