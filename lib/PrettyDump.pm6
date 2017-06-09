@@ -93,7 +93,7 @@ You can add a C<PrettyDump> method to an object with C<but role>:
 	put $pretty.dump: $a;
 
 	my $b = $a but role {
-		method PrettyDump ( PrettyDump $pretty, Int:D $depth = 0 ) {
+		method PrettyDump ( PrettyDump:D $pretty, Int:D $depth = 0 ) {
 			"({self.^name}) {self}";
 			}
 		};
