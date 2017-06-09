@@ -83,6 +83,27 @@ again and pass it the value of C<$depth+1> as it's second argument:
 			}
 		}
 
+You can add a C<PrettyDump> method to an object with C<but role>:
+
+	use PrettyDump;
+
+	my $pretty = PrettyDump.new;
+
+	my Int $a = 137;
+	put $pretty.dump: $a;
+
+	my $b = $a but role {
+		method PrettyDump ( $pretty, $depth = 0 ) {
+			"({self.^name}) {self}";
+			}
+		};
+	put $pretty.dump: $b;
+
+This outputs:
+
+	137
+	(Int+{<anon|140644552324304>}) 137
+
 =head2 Per-object dump handlers
 
 You can add custom handlers to your C<PrettyDump> object. Once added,
@@ -313,7 +334,7 @@ class PrettyDump {
 				}
 			# The object might have its own method to dump its structure
 			elsif $ds.can: 'PrettyDump' {
-				$ds.PrettyDump: self;
+				$ds.PrettyDump: self, $depth;
 				}
 			# If it's any sort of Numeric, we'll handle it and dispatch
 			# further
