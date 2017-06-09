@@ -329,45 +329,37 @@ class PrettyDump {
 		my Str $str = do {
 			# If the PrettyDump object has a user-defined handler
 			# for this type, prefer that one
-			if self.handles: $ds.^name {
-				self!handle: $ds, $depth;
-				}
+			if self.handles: $ds.^name { self!handle: $ds, $depth }
+
 			# The object might have its own method to dump its structure
-			elsif $ds.can: 'PrettyDump' {
-				$ds.PrettyDump: self, $depth;
-				}
+			elsif $ds.can: 'PrettyDump' { $ds.PrettyDump: self, $depth }
+
 			# If it's any sort of Numeric, we'll handle it and dispatch
 			# further
-			elsif $ds ~~ Numeric {
-				self!Numeric: $ds, $depth;
-				}
+			elsif $ds ~~ Numeric { self!Numeric: $ds, $depth; }
+
 			# If we have a method name that matches the class, we'll
 			# use that.
-			elsif self.can: $ds.^name {
-				my $what = $ds.^name;
-				self."$what"( $ds, $depth );
-				}
+			elsif self.can: $ds.^name { self."{$ds.^name}"( $ds, $depth ) }
+
 			# If the class inherits from something that we know
 			# about, use the most specific one that we know about
-			elsif $ds.^parents.grep( { self.can: $_.^name } ).elems > 0 {
+			elsif self.can: any( $ds.^parents.map: *.^name ) {
 				my Str $str = '';
-				for $ds.^parents -> $type {
-					my $what = $type.^name;
-					next unless self.can( $what );
-					$str ~= self."$what"( $ds, $depth, "{$ds.^name}.new(", ')' );
+				for $ds.^parents.map: *.^name -> $type {
+					next unless self.can: $type;
+					$str ~= self."$type"( $ds, $depth, "{$ds.^name}.new(", ')' );
 					last;
 					}
 				$str;
 				}
+
 			# If we're this far and the object has a .Str method,
 			# we'll use that:
-			elsif $ds.can: 'Str' {
-				"({$ds.^name}): " ~ $ds.Str;
-				}
+			elsif $ds.can: 'Str' { "({$ds.^name}): " ~ $ds.Str }
+
 			# Finally, we'll put a placeholder method there
-			else {
-				"(Unhandled {$ds.^name})"
-				}
+			else { "(Unhandled {$ds.^name})" }
 			};
 
 		return self!indent-string: $str, $depth;
