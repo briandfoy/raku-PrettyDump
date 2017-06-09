@@ -32,7 +32,7 @@ subtest {
 subtest {
 	my $p = $class.new;
 	is $p.handles( $tiny-class-str ), False, "Basic object does not handle $tiny-class-str";
-	my $sub = -> PrettyDump $p, $ds, Int $depth=0 --> Str {
+	my $sub = -> PrettyDump $p, $ds, Int:D $depth=0 --> Str {
 		'Hello foo ' ~ $ds.foo
 		};
 	$p.add-handler( $tiny-class-str, $sub );

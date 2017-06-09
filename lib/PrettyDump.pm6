@@ -63,7 +63,7 @@ in that class:
 		has $.genus;
 		has $.species;
 
-		method PrettyDump ( PrettyDump $pretty, Int $depth = 0 ) {
+		method PrettyDump ( PrettyDump $pretty, Int:D $depth = 0 ) {
 			"_{$.genus} {$.species}_";
 			}
 		}
@@ -77,7 +77,7 @@ again and pass it the value of C<$depth+1> as it's second argument:
 		has $.species;
 		has $.some-other-object;
 
-		method PrettyDump ( PrettyDump $pretty, Int $depth = 0 ) {
+		method PrettyDump ( PrettyDump $pretty, Int:D $depth = 0 ) {
 			"_{$.genus} {$.species}_" ~
 			$pretty.dump: $some-other-object, $depth + 1;
 			}
@@ -93,7 +93,7 @@ You can add a C<PrettyDump> method to an object with C<but role>:
 	put $pretty.dump: $a;
 
 	my $b = $a but role {
-		method PrettyDump ( $pretty, $depth = 0 ) {
+		method PrettyDump ( PrettyDump $pretty, Int:D $depth = 0 ) {
 			"({self.^name}) {self}";
 			}
 		};
@@ -115,7 +115,7 @@ override builtin methods.
 
 The code signature for C<$code-thingy> must be:
 
-	(PrettyDump $pretty, $ds, Int $depth = 0 --> Str)
+	(PrettyDump $pretty, $ds, Int:D $depth = 0 --> Str)
 
 Once you are done with the per-object handler, you can remove it:
 
@@ -303,7 +303,7 @@ class PrettyDump {
 	method add-handler ( Str:D $type-name, Code:D $code ) {
 		# check callable signature ( PrettyDump $pretty, $ds, Int $depth --> Str)
 		my $sig = $code.signature;
-		my $needed-sig = :( PrettyDump $pretty, $ds, Int $depth = 0 --> Str);
+		my $needed-sig = :( PrettyDump $pretty, $ds, Int:D $depth = 0 --> Str);
 		unless $sig ~~ $needed-sig {
 			fail X::AdHoc.new: payload => "Signature should be {$needed-sig.gist}";
 			}
