@@ -353,7 +353,7 @@ class PrettyDump {
 				my Str $str = '';
 				for $ds.^parents -> $type {
 					my $what = $type.^name;
-					next unless self.can( $what );
+					next unless self.can: $what;
 					$str ~= self."$what"( $ds, $depth, "{$ds.^name}.new(", ')' );
 					last;
 					}
