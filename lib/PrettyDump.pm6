@@ -194,12 +194,12 @@ class PrettyDump {
 
 	has Str $.indent                 = "\t";
 
-	method !indent-string ( Str $str, Int $depth --> Str ) {
+	method !indent-string ( Str:D $str, Int:D $depth --> Str ) {
 		return $str unless $.indent ne '';
 		return $str.subst: /^^/, $.indent x $depth, :g;
 		}
 
-	method Pair ( Pair $ds, Int $depth --> Str ) {
+	method Pair ( Pair:D $ds, Int:D $depth --> Str ) {
 		my $str = ':';
 		given $ds.value.^name {
 			when "Bool" {
@@ -220,19 +220,19 @@ class PrettyDump {
 		return $str;
 		}
 
-	method Hash ( Hash $ds, Int $depth, Str $start = '${', Str $end = '}' --> Str ) {
+	method Hash ( Hash:D $ds, Int:D $depth, Str:D $start = '${', Str:D $end = '}' --> Str ) {
 		self!balanced:  $start, $end, $ds, $depth;
 		}
 
-	method Array ( Array $ds, Int $depth, Str $start = '$[', Str $end = ']' --> Str ) {
+	method Array ( Array:D $ds, Int:D $depth, Str:D $start = '$[', Str:D $end = ']' --> Str ) {
 		self!balanced:  $start, $end, $ds, $depth;
 		}
 
-	method List ( List $ds, Int $depth, Str $start = '$(', Str $end = ')' --> Str ) {
+	method List ( List:D $ds, Int:D $depth, Str:D $start = '$(', Str:D $end = ')' --> Str ) {
 		self!balanced:  $start, $end, $ds, $depth;
 		}
 
-	method Range ( Range $ds, Int $depth --> Str ) {
+	method Range ( Range:D $ds, Int:D $depth --> Str ) {
 		[~]
 			$ds.min,
 			( $ds.excludes-min ?? '^' !! '' ),
@@ -241,7 +241,7 @@ class PrettyDump {
 			( $ds.infinite ?? '*' !! $ds.max ),
 		}
 
-	method !balanced ( Str $start, Str $end, $ds, Int $depth --> Str ) {
+	method !balanced ( Str:D $start, Str:D $end, $ds, Int:D $depth --> Str ) {
 		return [~] $start, self!structure( $ds, $depth ), $end;
 		}
 
@@ -260,12 +260,12 @@ class PrettyDump {
 			}
 		}
 
-	method Map ( Map $ds, Int $depth --> Str ) {
+	method Map ( Map:D $ds, Int:D $depth --> Str ) {
 		my $type = $ds.^name;
 		[~] qq/{$type}.new(/, self!structure( $ds, $depth ), ')';
 		}
 
-	method Match ( Match $ds, Int $depth --> Str ) {
+	method Match ( Match:D $ds, Int:D $depth --> Str ) {
 		my $type = $ds.^name;
 		my $str = qq/{$type}.new(/;
 		my $hash = {
@@ -281,7 +281,7 @@ class PrettyDump {
 		$str ~= ')';
 		}
 
-	method !Numeric ( Numeric $ds, Int $depth --> Str ) {
+	method !Numeric ( Numeric:D $ds, Int:D $depth --> Str ) {
 		do { given $ds {
 			when FatRat { [~] '<', $ds.numerator, '/' , $ds.denominator, '>' }
 			when Rat    { [~] '<', $ds.numerator, '/' , $ds.denominator, '>' }
@@ -292,15 +292,15 @@ class PrettyDump {
 		}
 
 
-	method Str   ( Str $ds, Int $depth --> Str ) { $ds.perl }
-	method Nil   ( Nil $ds, Int $depth --> Str ) { q/Nil/ }
-	method Any   ( Any $ds, Int $depth --> Str ) { q/Any/ }
-	method Mu    ( Mu  $ds, Int $depth --> Str ) { q/Mu/  }
-	method NQPMu (     $ds, Int $depth --> Str ) { q/Mu/  }
+	method Str   ( Str:D $ds, Int:D $depth --> Str ) { $ds.perl }
+	method Nil   ( Nil   $ds, Int:D $depth --> Str ) { q/Nil/ }
+	method Any   ( Any   $ds, Int:D $depth --> Str ) { q/Any/ }
+	method Mu    ( Mu    $ds, Int:D $depth --> Str ) { q/Mu/  }
+	method NQPMu (       $ds, Int:D $depth --> Str ) { q/Mu/  }
 
 	has %!handlers = Hash.new();
 
-	method add-handler ( Str $type-name, Code $code ) {
+	method add-handler ( Str:D $type-name, Code:D $code ) {
 		# check callable signature ( PrettyDump $pretty, $ds, Int $depth --> Str)
 		my $sig = $code.signature;
 		my $needed-sig = :( PrettyDump $pretty, $ds, Int $depth = 0 --> Str);
@@ -311,21 +311,21 @@ class PrettyDump {
 		%!handlers{$type-name} = $code;
 		}
 
-	method remove-handler ( Str $type-name ) {
+	method remove-handler ( Str:D $type-name ) {
 		%!handlers{$type-name}:delete.so
 		}
 
-	method handles ( Str $type-name --> Bool ) {
+	method handles ( Str:D $type-name --> Bool ) {
 		%!handlers{$type-name}:exists
 		}
 
-	method !handle ( $ds, Int $depth = 0 --> Str ) {
+	method !handle ( $ds, Int:D $depth = 0 --> Str ) {
 		# fail if it doesn't exist
 		my $handler = %!handlers{$ds.^name};
 		$handler.( self, $ds, $depth )
 		}
 
-	method dump ( $ds, Int $depth = 0 --> Str ) {
+	method dump ( $ds, Int:D $depth = 0 --> Str ) {
 		my Str $str = do {
 			# If the PrettyDump object has a user-defined handler
 			# for this type, prefer that one
