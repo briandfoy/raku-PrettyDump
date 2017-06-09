@@ -25,7 +25,7 @@ subtest {
 
 	{
 	my $b = $a but role {
-		method PrettyDump ( $pretty, $depth = 0 ) {
+		method PrettyDump ( PrettyDump $pretty, Int:D $depth = 0 ) {
 			"({self.^name}) {self}";
 			}
 		};
