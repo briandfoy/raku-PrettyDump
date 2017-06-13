@@ -221,15 +221,15 @@ class PrettyDump {
 		return $str;
 		}
 
-	method Hash ( Hash:D $ds, Str:D :$start = '${', Str:D :$end = '}', Int:D :$depth = 0, *%_ () --> Str ) {
+	method Hash ( Hash:D $ds, Str:D :$start = 'Hash={', Str:D :$end = '}', Int:D :$depth = 0, *%_ () --> Str ) {
 		self!balanced: $ds, :depth($depth), :start($start), :end($end);
 		}
 
-	method Array ( Array:D $ds, Str:D :$start = '$[', Str:D :$end = ']', Int:D :$depth = 0, *%_ () --> Str ) {
+	method Array ( Array:D $ds, Str:D :$start = 'Array=[', Str:D :$end = ']', Int:D :$depth = 0, *%_ () --> Str ) {
 		self!balanced: $ds, :depth($depth), :start($start), :end($end);
 		}
 
-	method List ( List:D $ds, Str:D :$start = '$(', Str:D :$end = ')', Int:D :$depth = 0, *%_ () --> Str ) {
+	method List ( List:D $ds, Str:D :$start = 'List=(', Str:D :$end = ')', Int:D :$depth = 0, *%_ () --> Str ) {
 		self!balanced: $ds, :depth($depth), :start($start), :end($end);
 		}
 
@@ -263,12 +263,12 @@ class PrettyDump {
 
 	method Map ( Map:D $ds, Int:D :$depth = 0, *%_ () --> Str ) {
 		my $type = $ds.^name;
-		[~] qq/{$type}.new(/, self!structure( $ds, :depth($depth) ), ')';
+		[~] qq/{$type}=(/, self!structure( $ds, :depth($depth) ), ')';
 		}
 
 	method Match ( Match:D $ds, Int:D :$depth = 0, *%_ () --> Str ) {
 		my $type = $ds.^name;
-		my $str = qq/{$type}.new(/;
+		my $str = qq/{$type}=(/;
 		my $hash = {
 			made => $ds.made,
 			to   => $ds.to,
@@ -350,7 +350,7 @@ class PrettyDump {
 				for $ds.^parents.map: *.^name -> $type {
 					next unless self.can: $type;
 					$str ~= self."$type"( $ds,
-						:start\ ("{$ds.^name}.new("),
+						:start\ ("{$ds.^name}=("),
 						:end\   (')'),
 						:depth\ ($depth)
 						);
