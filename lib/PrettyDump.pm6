@@ -63,7 +63,7 @@ in that class:
 		has $.genus;
 		has $.species;
 
-		method PrettyDump ( PrettyDump $pretty, Int:D $depth = 0 ) {
+		method PrettyDump ( PrettyDump $pretty, Int:D :$depth = 0 ) {
 			"_{$.genus} {$.species}_";
 			}
 		}
@@ -77,7 +77,7 @@ again and pass it the value of C<$depth+1> as it's second argument:
 		has $.species;
 		has $.some-other-object;
 
-		method PrettyDump ( PrettyDump $pretty, Int:D $depth = 0 ) {
+		method PrettyDump ( PrettyDump $pretty, Int:D :$depth = 0 ) {
 			"_{$.genus} {$.species}_" ~
 			$pretty.dump: $some-other-object, $depth + 1;
 			}
@@ -93,7 +93,7 @@ You can add a C<PrettyDump> method to an object with C<but role>:
 	put $pretty.dump: $a;
 
 	my $b = $a but role {
-		method PrettyDump ( PrettyDump:D $pretty, Int:D $depth = 0 ) {
+		method PrettyDump ( PrettyDump:D $pretty, Int:D :$depth = 0 ) {
 			"({self.^name}) {self}";
 			}
 		};
@@ -115,7 +115,7 @@ override builtin methods.
 
 The code signature for C<$code-thingy> must be:
 
-	(PrettyDump $pretty, $ds, Int:D $depth = 0 --> Str)
+	(PrettyDump $pretty, $ds, Int:D :$depth = 0 --> Str)
 
 Once you are done with the per-object handler, you can remove it:
 
@@ -167,7 +167,8 @@ can find at L<https://github.com/drforr/perl6-pp>
 
 =head1 SOURCE
 
-The repository for this source is in GitHub at L<https://github.com/briandfoy/perl6-PrettyDump>
+The repository for this source is in GitHub at
+L<https://github.com/briandfoy/perl6-PrettyDump>
 
 =head1 COPYRIGHT
 
@@ -194,12 +195,12 @@ class PrettyDump {
 
 	has Str $.indent                 = "\t";
 
-	method !indent-string ( Str:D $str, Int:D $depth = 0, *%_ () --> Str ) {
+	method !indent-string ( Str:D $str, Int:D :$depth = 0, *%_ () --> Str ) {
 		return $str unless $.indent ne '';
 		return $str.subst: /^^/, $.indent x $depth, :g;
 		}
 
-	method Pair ( Pair:D $ds, Int:D $depth = 0, *%_ () --> Str ) {
+	method Pair ( Pair:D $ds, Int:D :$depth = 0, *%_ () --> Str ) {
 		my $str = ':';
 		given $ds.value.^name {
 			when "Bool" {
@@ -213,26 +214,26 @@ class PrettyDump {
 				$str ~= [~]
 					$ds.key,
 					'(',
-					self.dump( $ds.value, 0 ).trim,
+					self.dump( $ds.value, :depth(0) ).trim,
 					')';
 				}
 			}
 		return $str;
 		}
 
-	method Hash ( Hash:D $ds, Int:D $depth = 0, Str:D $start = '${', Str:D $end = '}', *%_ () --> Str ) {
-		self!balanced:  $start, $end, $ds, $depth;
+	method Hash ( Hash:D $ds, Str:D $start = '${', Str:D $end = '}', Int:D :$depth = 0, *%_ () --> Str ) {
+		self!balanced:  $start, $end, $ds, :depth($depth);
 		}
 
-	method Array ( Array:D $ds, Int:D $depth = 0, Str:D $start = '$[', Str:D $end = ']', *%_ () --> Str ) {
-		self!balanced:  $start, $end, $ds, $depth;
+	method Array ( Array:D $ds, Str:D $start = '$[', Str:D $end = ']', Int:D :$depth = 0, *%_ () --> Str ) {
+		self!balanced:  $start, $end, $ds, :depth($depth);
 		}
 
-	method List ( List:D $ds, Int:D $depth = 0, Str:D $start = '$(', Str:D $end = ')', *%_ () --> Str ) {
-		self!balanced:  $start, $end, $ds, $depth;
+	method List ( List:D $ds, Str:D $start = '$(', Str:D $end = ')', Int:D :$depth = 0, *%_ () --> Str ) {
+		self!balanced:  $start, $end, $ds, :depth($depth);
 		}
 
-	method Range ( Range:D $ds, Int:D $depth = 0, *%_ () --> Str ) {
+	method Range ( Range:D $ds, Int:D :$depth = 0, *%_ () --> Str ) {
 		[~]
 			$ds.min,
 			( $ds.excludes-min ?? '^' !! '' ),
@@ -241,17 +242,17 @@ class PrettyDump {
 			( $ds.infinite ?? '*' !! $ds.max ),
 		}
 
-	method !balanced ( Str:D $start, Str:D $end, $ds, Int:D $depth = 0, *%_ () --> Str ) {
-		return [~] $start, self!structure( $ds, $depth ), $end;
+	method !balanced ( Str:D $start, Str:D $end, $ds, Int:D :$depth = 0, *%_ () --> Str ) {
+		return [~] $start, self!structure( $ds, :depth($depth) ), $end;
 		}
 
-	method !structure ( $ds, Int $depth = 0, *%_ () --> Str ) {
+	method !structure ( $ds, Int :$depth = 0, *%_ () --> Str ) {
 		if @($ds).elems {
 			my $separator = [~] $.pre-separator-spacing, ',', $.post-separator-spacing;
 			[~]
 				$.pre-item-spacing,
 				join( $separator,
-					map { self.dump: $_, $depth+1 }, sort @($ds)
+					map { self.dump: $_, :depth($depth+1) }, sort @($ds)
 					),
 				$.post-item-spacing;
 			}
@@ -260,12 +261,12 @@ class PrettyDump {
 			}
 		}
 
-	method Map ( Map:D $ds, Int:D $depth = 0, *%_ () --> Str ) {
+	method Map ( Map:D $ds, Int:D :$depth = 0, *%_ () --> Str ) {
 		my $type = $ds.^name;
-		[~] qq/{$type}.new(/, self!structure( $ds, $depth ), ')';
+		[~] qq/{$type}.new(/, self!structure( $ds, :depth($depth) ), ')';
 		}
 
-	method Match ( Match:D $ds, Int:D $depth = 0, *%_ () --> Str ) {
+	method Match ( Match:D $ds, Int:D :$depth = 0, *%_ () --> Str ) {
 		my $type = $ds.^name;
 		my $str = qq/{$type}.new(/;
 		my $hash = {
@@ -277,11 +278,11 @@ class PrettyDump {
 			list => $ds.list,
 			pos  => $ds.pos,
 			};
-		$str ~= self!structure: $hash, $depth;
+		$str ~= self!structure: $hash, :depth($depth);
 		$str ~= ')';
 		}
 
-	method !Numeric ( Numeric:D $ds, Int:D $depth = 0, *%_ () --> Str ) {
+	method !Numeric ( Numeric:D $ds, Int:D :$depth = 0, *%_ () --> Str ) {
 		do { given $ds {
 			when FatRat { [~] '<', $ds.numerator, '/' , $ds.denominator, '>' }
 			when Rat    { [~] '<', $ds.numerator, '/' , $ds.denominator, '>' }
@@ -292,18 +293,18 @@ class PrettyDump {
 		}
 
 
-	method Str   ( Str:D $ds, Int:D $depth = 0, *%_ () --> Str ) { $ds.perl }
-	method Nil   ( Nil   $ds, Int:D $depth = 0, *%_ () --> Str ) { q/Nil/ }
-	method Any   ( Any   $ds, Int:D $depth = 0, *%_ () --> Str ) { q/Any/ }
-	method Mu    ( Mu    $ds, Int:D $depth = 0, *%_ () --> Str ) { q/Mu/  }
-	method NQPMu (       $ds, Int:D $depth = 0, *%_ () --> Str ) { q/Mu/  }
+	method Str   ( Str:D $ds, Int:D :$depth = 0, *%_ () --> Str ) { $ds.perl }
+	method Nil   ( Nil   $ds, Int:D :$depth = 0, *%_ () --> Str ) { q/Nil/ }
+	method Any   ( Any   $ds, Int:D :$depth = 0, *%_ () --> Str ) { q/Any/ }
+	method Mu    ( Mu    $ds, Int:D :$depth = 0, *%_ () --> Str ) { q/Mu/  }
+	method NQPMu (       $ds, Int:D :$depth = 0, *%_ () --> Str ) { q/Mu/  }
 
 	has %!handlers = Hash.new();
 
 	method add-handler ( Str:D $type-name, Code:D $code ) {
-		# check callable signature ( PrettyDump $pretty, $ds, Int $depth --> Str)
+		# check callable signature ( PrettyDump $pretty, $ds, Int :$depth --> Str)
 		my $sig = $code.signature;
-		my $needed-sig = :( PrettyDump $pretty, $ds, Int:D $depth = 0 --> Str);
+		my $needed-sig = :( PrettyDump $pretty, $ds, Int:D :$depth = 0 --> Str);
 		unless $sig ~~ $needed-sig {
 			fail X::AdHoc.new: payload => "Signature should be {$needed-sig.gist}";
 			}
@@ -319,28 +320,28 @@ class PrettyDump {
 		%!handlers{$type-name}:exists
 		}
 
-	method !handle ( $ds, Int:D $depth = 0, *%_ () --> Str ) {
+	method !handle ( $ds, Int:D :$depth = 0, *%_ () --> Str ) {
 		# fail if it doesn't exist
 		my $handler = %!handlers{$ds.^name};
-		$handler.( self, $ds, $depth )
+		$handler.( self, $ds, :depth($depth) )
 		}
 
-	method dump ( $ds, Int:D $depth = 0, *%_ () --> Str ) {
+	method dump ( $ds, Int:D :$depth = 0, *%_ () --> Str ) {
 		my Str $str = do {
 			# If the PrettyDump object has a user-defined handler
 			# for this type, prefer that one
-			if self.handles: $ds.^name { self!handle: $ds, $depth }
+			if self.handles: $ds.^name { self!handle: $ds, :depth($depth) }
 
 			# The object might have its own method to dump its structure
-			elsif $ds.can: 'PrettyDump' { $ds.PrettyDump: self, $depth }
+			elsif $ds.can: 'PrettyDump' { $ds.PrettyDump: self, :depth($depth) }
 
 			# If it's any sort of Numeric, we'll handle it and dispatch
 			# further
-			elsif $ds ~~ Numeric { self!Numeric: $ds, $depth; }
+			elsif $ds ~~ Numeric { self!Numeric: $ds, :depth($depth) }
 
 			# If we have a method name that matches the class, we'll
 			# use that.
-			elsif self.can: $ds.^name { self."{$ds.^name}"( $ds, $depth ) }
+			elsif self.can: $ds.^name { self."{$ds.^name}"( $ds, :depth($depth) ) }
 
 			# If the class inherits from something that we know
 			# about, use the most specific one that we know about
@@ -348,7 +349,7 @@ class PrettyDump {
 				my Str $str = '';
 				for $ds.^parents.map: *.^name -> $type {
 					next unless self.can: $type;
-					$str ~= self."$type"( $ds, $depth, "{$ds.^name}.new(", ')' );
+					$str ~= self."$type"( $ds, "{$ds.^name}.new(", ')', :depth($depth) );
 					last;
 					}
 				$str;
@@ -362,7 +363,7 @@ class PrettyDump {
 			else { "(Unhandled {$ds.^name})" }
 			};
 
-		return self!indent-string: $str, $depth;
+		return self!indent-string: $str, :depth($depth);
 		}
 
 	sub pretty-dump ( $ds,

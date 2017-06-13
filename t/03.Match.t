@@ -27,7 +27,7 @@ subtest {
 	:to(4)
 )/;
 
-	is $string, $expected, 'Dumping @array works';
-	}, '@array';
+	is $string, $expected, 'Dumping Match works';
+	}, 'Match';
 
 done-testing();
