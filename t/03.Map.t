@@ -17,7 +17,7 @@ subtest {
 
 	my $string = $p.dump: $map;
 	isa-ok $string, Str, 'Got Str back';
-	my $expected = Q/Map.new(
+	my $expected = Q/Map=(
 	:a("b"),
 	:c("d")
 )/;

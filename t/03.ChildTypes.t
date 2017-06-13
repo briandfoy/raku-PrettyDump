@@ -31,7 +31,7 @@ subtest {
 
 	my $string = $p.dump: $object;
 	isa-ok $string, Str, 'Got Str back';
-	my $expected = qq/{$tiny-class-str}.new(
+	my $expected = qq/{$tiny-class-str}=(
 	:abc("123"),
 	:xyz("def")
 )/;

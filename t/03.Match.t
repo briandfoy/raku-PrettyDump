@@ -17,10 +17,10 @@ subtest {
 
 	my $string = $p.dump: $/;
 	isa-ok $string, Str, 'Got Str back';
-	my $expected = Q/Match.new(
+	my $expected = Q/Match=(
 	:from(2),
-	:hash(Map.new()),
-	:list($()),
+	:hash(Map=()),
+	:list(List=()),
 	:made(Mu),
 	:orig("abcdef"),
 	:pos(4),

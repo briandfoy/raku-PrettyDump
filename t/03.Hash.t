@@ -17,7 +17,7 @@ subtest {
 
 	my $string = $p.dump: %hash;
 	isa-ok $string, Str, 'Got Str back';
-	my $expected = Q/${
+	my $expected = Q/Hash={
 	:a("b"),
 	:c("d")
 }/;
@@ -31,7 +31,7 @@ subtest {
 
 	my $string = $p.dump: $hash;
 	isa-ok $string, Str, 'Got Str back';
-	my $expected = Q/${
+	my $expected = Q/Hash={
 	:a("b"),
 	:c("d")
 }/;
@@ -41,7 +41,7 @@ subtest {
 subtest {
 	my $string = $p.dump: %(<a b c d>);
 	isa-ok $string, Str, 'Got Str back';
-	my $expected = Q/${
+	my $expected = Q/Hash={
 	:a("b"),
 	:c("d")
 }/;

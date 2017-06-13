@@ -17,7 +17,7 @@ subtest {
 
 	my $string = $p.dump: @array;
 	isa-ok $string, Str, 'Got Str back';
-	my $expected = Q/$[
+	my $expected = Q/Array=[
 	"a",
 	"b",
 	"c",
@@ -33,7 +33,7 @@ subtest {
 
 	my $string = $p.dump: $array;
 	isa-ok $string, Str, 'Got Str back';
-	my $expected = Q/$[
+	my $expected = Q/Array=[
 	"a",
 	"b",
 	"c",
@@ -45,7 +45,7 @@ subtest {
 subtest {
 	my $string = $p.dump: [<a b c d>];
 	isa-ok $string, Str, 'Got Str back';
-	my $expected = Q/$[
+	my $expected = Q/Array=[
 	"a",
 	"b",
 	"c",
