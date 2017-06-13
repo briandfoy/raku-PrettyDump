@@ -221,16 +221,16 @@ class PrettyDump {
 		return $str;
 		}
 
-	method Hash ( Hash:D $ds, Str:D $start = '${', Str:D $end = '}', Int:D :$depth = 0, *%_ () --> Str ) {
-		self!balanced:  $start, $end, $ds, :depth($depth);
+	method Hash ( Hash:D $ds, Str:D :$start = '${', Str:D :$end = '}', Int:D :$depth = 0, *%_ () --> Str ) {
+		self!balanced: $ds, :depth($depth), :start($start), :end($end);
 		}
 
-	method Array ( Array:D $ds, Str:D $start = '$[', Str:D $end = ']', Int:D :$depth = 0, *%_ () --> Str ) {
-		self!balanced:  $start, $end, $ds, :depth($depth);
+	method Array ( Array:D $ds, Str:D :$start = '$[', Str:D :$end = ']', Int:D :$depth = 0, *%_ () --> Str ) {
+		self!balanced: $ds, :depth($depth), :start($start), :end($end);
 		}
 
-	method List ( List:D $ds, Str:D $start = '$(', Str:D $end = ')', Int:D :$depth = 0, *%_ () --> Str ) {
-		self!balanced:  $start, $end, $ds, :depth($depth);
+	method List ( List:D $ds, Str:D :$start = '$(', Str:D :$end = ')', Int:D :$depth = 0, *%_ () --> Str ) {
+		self!balanced: $ds, :depth($depth), :start($start), :end($end);
 		}
 
 	method Range ( Range:D $ds, Int:D :$depth = 0, *%_ () --> Str ) {
@@ -242,7 +242,7 @@ class PrettyDump {
 			( $ds.infinite ?? '*' !! $ds.max ),
 		}
 
-	method !balanced ( Str:D $start, Str:D $end, $ds, Int:D :$depth = 0, *%_ () --> Str ) {
+	method !balanced (  $ds, Str:D :$start!, Str:D :$end!, Int:D :$depth = 0, *%_ () --> Str ) {
 		return [~] $start, self!structure( $ds, :depth($depth) ), $end;
 		}
 
@@ -349,7 +349,11 @@ class PrettyDump {
 				my Str $str = '';
 				for $ds.^parents.map: *.^name -> $type {
 					next unless self.can: $type;
-					$str ~= self."$type"( $ds, "{$ds.^name}.new(", ')', :depth($depth) );
+					$str ~= self."$type"( $ds,
+						:start\ ("{$ds.^name}.new("),
+						:end\   (')'),
+						:depth\ ($depth)
+						);
 					last;
 					}
 				$str;
