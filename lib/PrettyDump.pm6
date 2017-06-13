@@ -194,12 +194,12 @@ class PrettyDump {
 
 	has Str $.indent                 = "\t";
 
-	method !indent-string ( Str:D $str, Int:D $depth, *%_ () --> Str ) {
+	method !indent-string ( Str:D $str, Int:D $depth = 0, *%_ () --> Str ) {
 		return $str unless $.indent ne '';
 		return $str.subst: /^^/, $.indent x $depth, :g;
 		}
 
-	method Pair ( Pair:D $ds, Int:D $depth, *%_ () --> Str ) {
+	method Pair ( Pair:D $ds, Int:D $depth = 0, *%_ () --> Str ) {
 		my $str = ':';
 		given $ds.value.^name {
 			when "Bool" {
@@ -220,19 +220,19 @@ class PrettyDump {
 		return $str;
 		}
 
-	method Hash ( Hash:D $ds, Int:D $depth, Str:D $start = '${', Str:D $end = '}', *%_ () --> Str ) {
+	method Hash ( Hash:D $ds, Int:D $depth = 0, Str:D $start = '${', Str:D $end = '}', *%_ () --> Str ) {
 		self!balanced:  $start, $end, $ds, $depth;
 		}
 
-	method Array ( Array:D $ds, Int:D $depth, Str:D $start = '$[', Str:D $end = ']', *%_ () --> Str ) {
+	method Array ( Array:D $ds, Int:D $depth = 0, Str:D $start = '$[', Str:D $end = ']', *%_ () --> Str ) {
 		self!balanced:  $start, $end, $ds, $depth;
 		}
 
-	method List ( List:D $ds, Int:D $depth, Str:D $start = '$(', Str:D $end = ')', *%_ () --> Str ) {
+	method List ( List:D $ds, Int:D $depth = 0, Str:D $start = '$(', Str:D $end = ')', *%_ () --> Str ) {
 		self!balanced:  $start, $end, $ds, $depth;
 		}
 
-	method Range ( Range:D $ds, Int:D $depth, *%_ () --> Str ) {
+	method Range ( Range:D $ds, Int:D $depth = 0, *%_ () --> Str ) {
 		[~]
 			$ds.min,
 			( $ds.excludes-min ?? '^' !! '' ),
@@ -241,11 +241,11 @@ class PrettyDump {
 			( $ds.infinite ?? '*' !! $ds.max ),
 		}
 
-	method !balanced ( Str:D $start, Str:D $end, $ds, Int:D $depth, *%_ () --> Str ) {
+	method !balanced ( Str:D $start, Str:D $end, $ds, Int:D $depth = 0, *%_ () --> Str ) {
 		return [~] $start, self!structure( $ds, $depth ), $end;
 		}
 
-	method !structure ( $ds, Int $depth, *%_ () --> Str ) {
+	method !structure ( $ds, Int $depth = 0, *%_ () --> Str ) {
 		if @($ds).elems {
 			my $separator = [~] $.pre-separator-spacing, ',', $.post-separator-spacing;
 			[~]
@@ -260,12 +260,12 @@ class PrettyDump {
 			}
 		}
 
-	method Map ( Map:D $ds, Int:D $depth, *%_ () --> Str ) {
+	method Map ( Map:D $ds, Int:D $depth = 0, *%_ () --> Str ) {
 		my $type = $ds.^name;
 		[~] qq/{$type}.new(/, self!structure( $ds, $depth ), ')';
 		}
 
-	method Match ( Match:D $ds, Int:D $depth, *%_ () --> Str ) {
+	method Match ( Match:D $ds, Int:D $depth = 0, *%_ () --> Str ) {
 		my $type = $ds.^name;
 		my $str = qq/{$type}.new(/;
 		my $hash = {
@@ -281,7 +281,7 @@ class PrettyDump {
 		$str ~= ')';
 		}
 
-	method !Numeric ( Numeric:D $ds, Int:D $depth, *%_ () --> Str ) {
+	method !Numeric ( Numeric:D $ds, Int:D $depth = 0, *%_ () --> Str ) {
 		do { given $ds {
 			when FatRat { [~] '<', $ds.numerator, '/' , $ds.denominator, '>' }
 			when Rat    { [~] '<', $ds.numerator, '/' , $ds.denominator, '>' }
@@ -292,11 +292,11 @@ class PrettyDump {
 		}
 
 
-	method Str   ( Str:D $ds, Int:D $depth, *%_ () --> Str ) { $ds.perl }
-	method Nil   ( Nil   $ds, Int:D $depth, *%_ () --> Str ) { q/Nil/ }
-	method Any   ( Any   $ds, Int:D $depth, *%_ () --> Str ) { q/Any/ }
-	method Mu    ( Mu    $ds, Int:D $depth, *%_ () --> Str ) { q/Mu/  }
-	method NQPMu (       $ds, Int:D $depth, *%_ () --> Str ) { q/Mu/  }
+	method Str   ( Str:D $ds, Int:D $depth = 0, *%_ () --> Str ) { $ds.perl }
+	method Nil   ( Nil   $ds, Int:D $depth = 0, *%_ () --> Str ) { q/Nil/ }
+	method Any   ( Any   $ds, Int:D $depth = 0, *%_ () --> Str ) { q/Any/ }
+	method Mu    ( Mu    $ds, Int:D $depth = 0, *%_ () --> Str ) { q/Mu/  }
+	method NQPMu (       $ds, Int:D $depth = 0, *%_ () --> Str ) { q/Mu/  }
 
 	has %!handlers = Hash.new();
 
