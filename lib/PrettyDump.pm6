@@ -254,7 +254,8 @@ class PrettyDump {
 			[~]
 				$.pre-item-spacing,
 				join( $separator,
-					map { self.dump: $_, :depth($depth+1) }, sort @($ds)
+					grep { $_ ~~ Str:D },
+					map { self.dump: $_, :depth($depth+1) }, @($ds)
 					),
 				$.post-item-spacing;
 			}
