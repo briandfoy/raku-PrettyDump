@@ -198,7 +198,6 @@ use v6;
 
 ###############################################################################
 
-
 class PrettyDump {
 	has Str $.pre-item-spacing       = "\n";
 	has Str $.post-item-spacing      = "\n";
@@ -316,23 +315,55 @@ class PrettyDump {
 
 	has %!handlers = Hash.new();
 
-	method add-handler ( Str:D $type-name, Code:D $code ) {
-		# check callable signature ( PrettyDump $pretty, $ds, Int :$depth --> Str)
+	multi method ignore-type ( Any:U $type ) {
+		self.ignore-type: $type.^name;
+		}
+
+	multi method ignore-type ( Str:D $type-name ) {
+		self.add-handler:
+			$type-name,
+			-> PrettyDump $pretty, $ds, Int:D :$depth = 0 --> Str { Str:U };
+		}
+
+	multi method add-handler ( Str:D $type-name, Code:D $code ) {
 		my $sig = $code.signature;
-		my $needed-sig = :( PrettyDump $pretty, $ds, Int:D :$depth = 0 --> Str);
-		unless $sig ~~ $needed-sig {
-			fail X::AdHoc.new: payload => "Signature should be {$needed-sig.gist}";
+		my $needed-sig  = :( PrettyDump $pretty, $ds, Int:D :$depth = 0 --> Str );
+
+		unless $sig ~~ any $needed-sig {
+			fail X::AdHoc.new: payload => "Signature should be:\n\t:{$needed-sig.gist}\nbut got\n\t:{$sig.gist}";
 			}
 
 		%!handlers{$type-name} = $code;
 		}
 
-	method remove-handler ( Str:D $type-name, *%_ () ) {
+	multi method add-handler ( Any:U $type, Code:D $code ) {
+		self.add-handler: $type.^name, $code;
+		}
+
+	multi method create-handler ( Str:D $type-name, Code:D $code, *%_ () --> Code ) {
+		-> :( PrettyDump $pretty, $ds, Int:D :$depth = 0 --> Str ) {
+			$code( $pretty, $ds, $depth )
+			}
+		}
+
+	multi method create-handler ( Any:U $type, Code:D $code, *%_ () --> Code ) {
+		self.create-handler: $type.^name, $code;
+		}
+
+	multi method remove-handler ( Str:D $type-name, *%_ () ) {
 		%!handlers{$type-name}:delete.so
 		}
 
-	method handles ( Str:D $type-name, *%_ () --> Bool ) {
+	multi method remove-handler ( Any:U $type, *%_ () ) {
+		%!handlers{$type.^name}:delete.so
+		}
+
+	multi method handles ( Str:D $type-name, *%_ () --> Bool ) {
 		%!handlers{$type-name}:exists
+		}
+
+	multi method handles ( Any:U $type, *%_ () --> Bool ) {
+		%!handlers{$type.^name}:exists
 		}
 
 	method !handle ( $ds, Int:D :$depth = 0, *%_ () --> Str ) {
