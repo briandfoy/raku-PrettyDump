@@ -382,7 +382,12 @@ class PrettyDump {
 			else { "(Unhandled {$ds.^name})" }
 			};
 
-		return self!indent-string: $str, :depth($depth);
+		# we might return a type object
+		return $str.defined
+			??
+			self!indent-string: $str, :depth($depth)
+			!!
+			$str;
 		}
 
 	sub pretty-dump ( $ds,
