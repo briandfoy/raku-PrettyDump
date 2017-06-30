@@ -124,7 +124,7 @@ Once you are done with the per-object handler, you can remove it:
 This allows you to temporarily override a builtin method. You might
 want to mute a particular object, for instance.
 
-=head2 Configuration
+=head2 Formatting and Configuration
 
 You can set some tidy-like settings to control how C<.dump> will
 present the data stucture:
