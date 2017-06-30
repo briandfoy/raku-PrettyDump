@@ -224,7 +224,7 @@ class PrettyDump {
 		}
 
 	method Hash ( Hash:D $ds, Str:D :$start = 'Hash={', Str:D :$end = '}', Int:D :$depth = 0, *%_ () --> Str ) {
-		self!balanced: $ds, :depth($depth), :start($start), :end($end);
+		self!balanced: $ds.sort(*.key), :depth($depth), :start($start), :end($end);
 		}
 
 	method Array ( Array:D $ds, Str:D :$start = 'Array=[', Str:D :$end = ']', Int:D :$depth = 0, *%_ () --> Str ) {
@@ -281,7 +281,7 @@ class PrettyDump {
 			list => $ds.list,
 			pos  => $ds.pos,
 			};
-		$str ~= self!structure: $hash, :depth($depth);
+		$str ~= self!structure: $hash.sort(*.key), :depth($depth);
 		$str ~= ')';
 		}
 
