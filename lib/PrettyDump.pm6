@@ -175,6 +175,8 @@ brian d foy, C<< <bdfoy@cpan.org> >>.
 This module started as L<Pretty::Printer> from Jeff Goff, which you
 can find at L<https://github.com/drforr/perl6-pp>
 
+Parts of this module were supported by a grant from the Perl Foundation.
+
 =head1 SOURCE
 
 The repository for this source is in GitHub at
