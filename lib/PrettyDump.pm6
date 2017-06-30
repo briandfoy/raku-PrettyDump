@@ -172,6 +172,8 @@ L<https://github.com/briandfoy/perl6-PrettyDump>
 
 =head1 COPYRIGHT
 
+Copyright © 2017, brian d foy C<< <bdfoy@cpan.org> >>
+
 =head1 LICENSE
 
 This module is available under the Artistic License 2.0. A copy of
