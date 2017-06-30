@@ -124,6 +124,16 @@ Once you are done with the per-object handler, you can remove it:
 This allows you to temporarily override a builtin method. You might
 want to mute a particular object, for instance.
 
+You can completely ignore a type as if it's not even there. It's a
+wrapper around add-handler that supplies the code for you.
+
+	$pretty.ignore-type: SomeType;
+
+This works by returning a C<Str> type object instead of a defined
+string. If the type you want to exclude is at the top of the data
+structure, you'll get back a type object. But why are you dumpng
+something you want to ignore?
+
 =head2 Formatting and Configuration
 
 You can set some tidy-like settings to control how C<.dump> will
