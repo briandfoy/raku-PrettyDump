@@ -352,7 +352,7 @@ class PrettyDump {
 
 			# If it's any sort of Numeric, we'll handle it and dispatch
 			# further
-			elsif $ds ~~ Numeric { self!Numeric: $ds, :depth($depth) }
+			elsif $ds ~~ Numeric:D { self!Numeric: $ds, :depth($depth) }
 
 			# If we have a method name that matches the class, we'll
 			# use that.
