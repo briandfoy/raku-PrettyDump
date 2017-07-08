@@ -125,7 +125,7 @@ This allows you to temporarily override a builtin method. You might
 want to mute a particular object, for instance.
 
 You can completely ignore a type as if it's not even there. It's a
-wrapper around add-handler that supplies the code for you.
+wrapper around g that supplies the code for you.
 
 	$pretty.ignore-type: SomeType;
 
@@ -198,7 +198,7 @@ use v6;
 
 ###############################################################################
 
-class PrettyDump:auth<BDFOY>:ver<1.1.2> {
+class PrettyDump:auth<BDFOY>:ver<1.1.3> {
 	has Str $.pre-item-spacing       = "\n";
 	has Str $.post-item-spacing      = "\n";
 
@@ -227,6 +227,7 @@ class PrettyDump:auth<BDFOY>:ver<1.1.2> {
 				$str ~= [~]
 					$ds.key,
 					'(',
+					# depth is zero here because this part won't be indented
 					self.dump( $ds.value, :depth(0) ).trim,
 					')';
 				}
@@ -235,6 +236,7 @@ class PrettyDump:auth<BDFOY>:ver<1.1.2> {
 		}
 
 	method Hash ( Hash:D $ds, Str:D :$start = 'Hash={', Str:D :$end = '}', Int:D :$depth = 0, *%_ () --> Str ) {
+		my $longest-key = $ds.keys.max: :by( *.chars );
 		self!balanced: $ds.sort(*.key), :depth($depth), :start($start), :end($end);
 		}
 
