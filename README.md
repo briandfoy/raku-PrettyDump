@@ -1,6 +1,4 @@
-[![AppVeyor status](https://ci.appveyor.com/api/projects/status/m7fjcqjmoue0wssu?svg=true)](https://ci.appveyor.com/project/briandfoy/perl6-prettydump)
-
-[![Travis status](https://travis-ci.org/briandfoy/perl6-PrettyDump.svg?branch=master)](https://travis-ci.org/briandfoy/perl6-PrettyDump)
+[![AppVeyor status](https://ci.appveyor.com/api/projects/status/m7fjcqjmoue0wssu?svg=true)](https://ci.appveyor.com/project/briandfoy/perl6-prettydump) [![Travis status](https://travis-ci.org/briandfoy/perl6-PrettyDump.svg?branch=master)](https://travis-ci.org/briandfoy/perl6-PrettyDump)
 
 # The Perl 6 PrettyDump module
 
