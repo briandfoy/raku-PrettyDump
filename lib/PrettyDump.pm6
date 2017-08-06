@@ -29,6 +29,13 @@ Or, use its subroutine:
 		:indent("\t")
 		);
 
+Or, a shorter shortcut that dumps and outputs to standard output:
+
+	use PrettyDump;
+
+    my $ds = { a => 1 };
+   	pd $ds;
+
 =head1 DESCRIPTION
 
 This module creates nicely formatted representations of your data
@@ -441,5 +448,9 @@ class PrettyDump:auth<BDFOY>:ver<1.1.5> {
 			;
 
 		$pretty.dump: $ds;
+		}
+
+	sub pd ( $ds ) is export {
+		pretty-dump( $ds ).put;
 		}
 	}
