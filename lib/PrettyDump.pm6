@@ -18,7 +18,7 @@ Use is in the OO fashion:
 
 Or, use its subroutine:
 
-	use PrettyDump qw(pretty-dump);
+	use PrettyDump;
 
     my $ds = { a => 1 };
 
