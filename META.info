@@ -5,7 +5,7 @@
   "build-depends" : [ ],
   "depends" : [ ],
   "description" : "represent a Perl 6 data structure in a human readable way",
-  "license" : "NOASSERTION",
+  "license" : "Artistic-2.0",
   "name" : "PrettyDump",
   "perl" : "6.c",
   "provides" : {
