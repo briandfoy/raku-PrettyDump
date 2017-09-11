@@ -10,7 +10,6 @@
   "perl" : "6.c",
   "provides" : {
     "PrettyDump" : "lib/PrettyDump.pm6",
-    "Test" : "lib/Test.pm6"
   },
   "resources" : [ ],
   "source-url" : "https://github.com/briandfoy/perl6-PrettyDump",
