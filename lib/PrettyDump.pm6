@@ -205,7 +205,7 @@ use v6;
 
 ###############################################################################
 
-class PrettyDump:auth<github:briandfoy>:ver<1.1.6> {
+class PrettyDump:auth<github:briandfoy>:ver<1.1.7> {
 	has Str $.pre-item-spacing       = "\n";
 	has Str $.post-item-spacing      = "\n";
 
