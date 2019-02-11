@@ -288,7 +288,7 @@ class PrettyDump:auth<github:briandfoy>:ver<1.1.7> {
 
 	method Map ( Map:D $ds, Int:D :$depth = 0, *%_ () --> Str ) {
 		my $type = $ds.^name;
-		[~] qq/{$type}=(/, self!structure( $ds, :depth($depth) ), ')';
+		[~] qq/{$type}=(/, self!structure( $ds.sort(*.key), :depth($depth) ), ')';
 		}
 
 	method Match (
@@ -312,7 +312,7 @@ class PrettyDump:auth<github:briandfoy>:ver<1.1.7> {
 			);
 		[~]
 			$start,
-			self!structure( $hash, :depth($depth) ),
+			self!structure( $hash.sort(*.key), :depth($depth) ),
 			$end
 		}
 
