@@ -4,7 +4,7 @@
   ],
   "build-depends" : [ ],
   "depends" : [ ],
-  "description" : "represent a Perl 6 data structure in a human readable way",
+  "description" : "represent a Raku data structure in a human readable way",
   "license" : "Artistic-2.0",
   "name" : "PrettyDump",
   "perl" : "6.c",
@@ -12,7 +12,7 @@
     "PrettyDump" : "lib/PrettyDump.pm6"
   },
   "resources" : [ ],
-  "source-url" : "git@github.com:briandfoy/perl6-PrettyDump.git",
+  "source-url" : "git@github.com:briandfoy/raku-PrettyDump.git",
   "tags" : [ ],
   "test-depends" : [
   	"Test",

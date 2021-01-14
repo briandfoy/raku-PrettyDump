@@ -2,7 +2,7 @@
 
 # The Perl 6 PrettyDump module
 
-When you want to look at your Perl 6 data structure, you probably want
+When you want to look at your Raku data structure, you probably want
 something nicer than `.perl` or `.gist`.
 
 

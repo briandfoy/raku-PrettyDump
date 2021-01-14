@@ -2,7 +2,7 @@
 
 =head1 NAME
 
-PrettyDump - represent a Perl 6 data structure in a human readable way
+PrettyDump - represent a Raku data structure in a human readable way
 
 =head1 SYNOPSIS
 
@@ -13,8 +13,8 @@ Use is in the OO fashion:
     	after-opening-brace => True
     	;
 
-    my $perl = { a => 1 };
-    say $pretty.dump: $perl; # '{:a(1)}'
+	my $raku = { a => 1 };
+	say $pretty.dump: $raku; # '{:a(1)}'
 
 Or, use its subroutine:
 
@@ -39,7 +39,7 @@ Or, a shorter shortcut that dumps and outputs to standard output:
 =head1 DESCRIPTION
 
 This module creates nicely formatted representations of your data
-structure for your viewing pleasure. It does not create valid Perl 6
+structure for your viewing pleasure. It does not create valid Raku
 code and is not a serialization tool.
 
 When C<.dump> encounters an object in your data structure, it first
@@ -191,7 +191,7 @@ Parts of this module were supported by a grant from the Perl Foundation.
 =head1 SOURCE
 
 The repository for this source is in GitHub at
-L<https://github.com/briandfoy/perl6-PrettyDump>
+L<https://github.com/briandfoy/raku-PrettyDump>
 
 =head1 COPYRIGHT
 
