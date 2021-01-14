@@ -1,0 +1,27 @@
+# Contributing to raku-PrettyDump
+
+## Level 1 - Inquiry
+
+* create an issue to tell me what you're thinking about. We'll go from there.
+* if you want a particular feature, ensure it fits in the goals of this module.
+* if I don't get back to you within a week, bug me in email *brian.d.foy@gmail.com*. Sometimes the GitHub notifications don't reach me.
+
+## Level 2 - Bug report
+
+* create a short, minimal program that demonstrates the problem, if you can
+* you don't have to know why it happens, just show me that it does happen
+* put that program in an issue
+
+## Level 3 - Pull request
+
+* you might start with an issue before you do a lot of work
+* when you create a pull request, check that you do three things that help me incorporate your changes:
+	* your fix or change
+	* update the docs
+	* create a test
+* check that the tests pass locally (your PR will trigger the GitHub Actions too).
+* if I have to handle lots of that, it goes toward the bottom of my to-do list
+
+## Level 4 - Fork
+
+* if you want something much different than what this module does, use my code as a basis. Change it however you like according to the very liberal license.
