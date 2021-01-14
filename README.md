@@ -1,10 +1,9 @@
-[![AppVeyor status](https://ci.appveyor.com/api/projects/status/m7fjcqjmoue0wssu?svg=true)](https://ci.appveyor.com/project/briandfoy/perl6-prettydump) [![Travis status](https://travis-ci.org/briandfoy/perl6-PrettyDump.svg?branch=master)](https://travis-ci.org/briandfoy/perl6-PrettyDump) [![artistic2](https://img.shields.io/badge/license-Artistic%202.0-blue.svg?style=flat)](https://opensource.org/licenses/Artistic-2.0)
+[![AppVeyor status](https://ci.appveyor.com/api/projects/status/m7fjcqjmoue0wssu?svg=true)](https://ci.appveyor.com/project/briandfoy/perl6-prettydump) [![artistic2](https://img.shields.io/badge/license-Artistic%202.0-blue.svg?style=flat)](https://opensource.org/licenses/Artistic-2.0)
 
 # The Raku PrettyDump module
 
 When you want to look at your Raku data structure, you probably want
 something nicer than `.perl` or `.gist`.
-
 
 
 ## Installation
