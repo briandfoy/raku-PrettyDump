@@ -6,7 +6,7 @@ PrettyDump - represent a Raku data structure in a human readable way
 
 =head1 SYNOPSIS
 
-Use is in the OO fashion:
+Use it in the OO fashion:
 
 	use PrettyDump;
 	my $pretty = PrettyDump.new:
