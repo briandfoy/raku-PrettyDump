@@ -12,7 +12,7 @@
     "PrettyDump" : "lib/PrettyDump.pm6"
   },
   "resources" : [ ],
-  "source-url" : "git@github.com:briandfoy/raku-PrettyDump.git",
+  "source-url" : "https://github.com/briandfoy/raku-PrettyDump.git",
   "tags" : [ ],
   "test-depends" : [
   	"Test",
