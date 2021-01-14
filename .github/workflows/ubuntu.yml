@@ -1,0 +1,29 @@
+name: ubuntu
+
+on:
+    push:
+        branches:
+            - '*'
+        tags-ignore:
+            - '*'
+        pull_request:
+
+jobs:
+    raku:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v2
+            - uses: Raku/setup-raku@v1
+            - name: Platform check
+              run: |
+                uname -a
+            - name: Raku version check
+              run: |
+                raku -V
+            - name: Install dependencies
+              run: |
+                zef install --/test --test-depends --deps-only .
+                zef install --/test App::Prove6
+            - name: Run tests
+              run: |
+                prove6 -l t
