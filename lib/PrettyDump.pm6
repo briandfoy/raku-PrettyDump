@@ -146,6 +146,10 @@ something you want to ignore?
 You can set some tidy-like settings to control how C<.dump> will
 present the data stucture:
 
+=item debug
+
+Output debugging info to watch the module walk the data structure.
+
 =item indent
 
 The default is a tab.
