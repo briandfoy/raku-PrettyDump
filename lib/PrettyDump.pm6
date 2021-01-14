@@ -214,6 +214,8 @@ class PrettyDump:auth<github:briandfoy>:ver<1.1.7> {
 	has Str $.post-separator-spacing = "\n";
 
 	has Str $.indent                 = "\t";
+	has Bool $.debug                 = False;
+	has Bool $.recompile			 = False;
 
 	method !indent-string ( Str:D $str, Int:D :$depth = 0, *%_ () --> Str ) {
 		return $str unless $.indent ne '';
@@ -243,7 +245,7 @@ class PrettyDump:auth<github:briandfoy>:ver<1.1.7> {
 		}
 
 	method Hash ( Hash:D $ds, Str:D :$start = 'Hash={', Str:D :$end = '}', Int:D :$depth = 0, *%_ () --> Str ) {
-		say "In hash";
+		say "In hash" if $.debug;
 		my $longest-key = $ds.keys.max: :by( *.chars );
 		self!balanced: $ds.sort(*.key), :depth($depth), :start($start), :end($end);
 		}
@@ -270,7 +272,7 @@ class PrettyDump:auth<github:briandfoy>:ver<1.1.7> {
 		}
 
 	method !structure ( $ds, Int :$depth = 0, *%_ () --> Str ) {
-	say "In structure";
+	say "In structure" if $.debug;
 		if @($ds).elems {
 			my $separator = [~] $.pre-separator-spacing, ',', $.post-separator-spacing;
 			[~]
@@ -298,7 +300,7 @@ class PrettyDump:auth<github:briandfoy>:ver<1.1.7> {
 		Str:D :$end   = ')',
 		*%_ () --> Str
 		) {
-		say "In match";
+		say "In match" if $.debug;
 		my $type = $ds.^name;
 		my $str = qq/{$type}=(/;
 		my $hash = %(
