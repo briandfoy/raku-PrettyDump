@@ -33,8 +33,8 @@ Or, a shorter shortcut that dumps and outputs to standard output:
 
 	use PrettyDump;
 
-    my $ds = { a => 1 };
-   	pd $ds;
+	my $ds = { a => 1 };
+	pd $ds;
 
 =head1 DESCRIPTION
 
@@ -219,7 +219,7 @@ class PrettyDump:auth<github:briandfoy>:ver<1.2.1> {
 
 	has Str $.indent                 = "\t";
 	has Bool $.debug                 = False;
-	has Bool $.recompile			 = False;
+	has Bool $.recompile             = False;
 
 	method !indent-string ( Str:D $str, Int:D :$depth = 0, *%_ () --> Str ) {
 		return $str unless $.indent ne '';
