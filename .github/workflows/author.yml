@@ -1,0 +1,34 @@
+name: author_tests
+
+on:
+    push:
+        branches:
+            - 'master'
+
+jobs:
+    raku:
+        runs-on: ${{ matrix.os }}
+        strategy:
+          matrix:
+            os:
+                - macos-latest
+                - ubuntu-latest
+                - windows-latest
+        steps:
+            - uses: actions/checkout@v2
+            - uses: Raku/setup-raku@v1
+            - name: Platform check
+              run: |
+                uname -a
+            - name: Raku version check
+              run: |
+                raku -V
+            - name: Install dependencies
+              run: |
+                zef install --/test --test-depends --deps-only .
+                zef install --/test App::Prove6
+            - name: Run tests
+              env:
+                AUTHOR_TEST: 1
+              run: |
+                prove6 -l xt
