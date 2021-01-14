@@ -8,10 +8,10 @@ PrettyDump - represent a Raku data structure in a human readable way
 
 Use is in the OO fashion:
 
-    use PrettyDump;
-    my $pretty = PrettyDump.new:
-    	after-opening-brace => True
-    	;
+	use PrettyDump;
+	my $pretty = PrettyDump.new:
+		after-opening-brace => True
+		;
 
 	my $raku = { a => 1 };
 	say $pretty.dump: $raku; # '{:a(1)}'
@@ -20,7 +20,7 @@ Or, use its subroutine:
 
 	use PrettyDump;
 
-    my $ds = { a => 1 };
+	my $ds = { a => 1 };
 
 	say pretty-dump( $ds );
 
