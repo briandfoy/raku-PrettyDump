@@ -15,12 +15,14 @@
 ## Level 3 - Pull request
 
 * you might start with an issue before you do a lot of work
+* maybe you want to work on an existing issue
 * when you create a pull request, check that you do three things that help me incorporate your changes:
 	* your fix or change
 	* update the docs
 	* create a test
 * check that the tests pass locally (your PR will trigger the GitHub Actions too).
 * if I have to handle lots of that, it goes toward the bottom of my to-do list
+* if you can't do all that, no big whoop, but I might not be able to immediately set aside the time to follow up
 
 ## Level 4 - Fork
 
