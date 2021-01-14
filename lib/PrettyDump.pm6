@@ -195,7 +195,7 @@ L<https://github.com/briandfoy/raku-PrettyDump>
 
 =head1 COPYRIGHT
 
-Copyright © 2017-2018, brian d foy C<< <bdfoy@cpan.org> >>
+Copyright © 2017-2021, brian d foy C<< <bdfoy@cpan.org> >>
 
 =head1 LICENSE
 
